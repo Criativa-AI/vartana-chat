@@ -297,6 +297,13 @@
       "REJECT_CALL": "Reject",
       "JOIN_CALL": "Join call",
       "END_CALL": "End call"
+    },
+    "KANBAN": {
+      "TITLE": "Conversations Kanban",
+      "REFRESH": "Refresh",
+      "LOADING": "Loading kanban",
+      "BACKLOG": "Backlog",
+      "UNNAMED_CONTACT": "Unnamed contact"
     }
   },
   "EMAIL_TRANSCRIPT": {

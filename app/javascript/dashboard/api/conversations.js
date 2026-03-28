@@ -13,6 +13,24 @@ class ConversationApi extends ApiClient {
   updateLabels(conversationID, labels) {
     return axios.post(`${this.url}/${conversationID}/labels`, { labels });
   }
+
+  getKanban(params = {}) {
+    return axios.get(`${this.url}/kanban`, { params });
+  }
+
+  getKanbanGeneral(params = {}) {
+    return axios.get(`${this.url}/kanban_general`, { params });
+  }
+
+  moveStage(conversationID, stageLabelId) {
+    return axios.post(`${this.url}/${conversationID}/move_stage`, {
+      stage_label_id: stageLabelId,
+    });
+  }
+
+  moveStatus(conversationID, status) {
+    return axios.post(`${this.url}/${conversationID}/move_status`, { status });
+  }
 }
 
 export default new ConversationApi();

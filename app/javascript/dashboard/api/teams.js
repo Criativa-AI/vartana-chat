@@ -37,6 +37,32 @@ export class TeamsAPI extends CacheEnabledApiClient {
       user_ids: agentsList,
     });
   }
+
+  getKanbans(teamId) {
+    return axios.get(`${this.url}/${teamId}/kanbans`);
+  }
+
+  createKanban(teamId, kanban) {
+    return axios.post(`${this.url}/${teamId}/kanbans`, { kanban });
+  }
+
+  updateKanban(teamId, kanbanId, kanban) {
+    return axios.patch(`${this.url}/${teamId}/kanbans/${kanbanId}`, { kanban });
+  }
+
+  deleteKanban(teamId, kanbanId) {
+    return axios.delete(`${this.url}/${teamId}/kanbans/${kanbanId}`);
+  }
+
+  setDefaultKanban(teamId, kanbanId) {
+    return axios.post(`${this.url}/${teamId}/kanbans/${kanbanId}/set_default`);
+  }
+
+  reorderKanbans(teamId, kanbanIds) {
+    return axios.patch(`${this.url}/${teamId}/kanbans/reorder`, {
+      kanban_ids: kanbanIds,
+    });
+  }
 }
 
 export default new TeamsAPI();

@@ -18,6 +18,7 @@ export function useCaptain() {
   const { t } = useI18n();
   const { isCloudFeatureEnabled, currentAccount } = useAccount();
   const { isEnterprise } = useConfig();
+  const isOnChatwootCloud = useMapGetter('globalConfig/isOnChatwootCloud');
   const uiFlags = useMapGetter('accounts/getUIFlags');
   const currentChat = useMapGetter('getSelectedChat');
   const replyMode = useMapGetter('draftMessages/getReplyEditorMode');
@@ -58,7 +59,7 @@ export function useCaptain() {
   const isFetchingLimits = computed(() => uiFlags.value.isFetchingLimits);
 
   const fetchLimits = () => {
-    if (isEnterprise) {
+    if (isEnterprise && isOnChatwootCloud.value) {
       store.dispatch('accounts/limits');
     }
   };
