@@ -261,7 +261,7 @@
     "SENT_BY": "Sent by:",
     "BOT": "Bot",
     "NATIVE_APP": "Native app",
-    "NATIVE_APP_ADVISORY": "This message was sent from the native app. Reply from Chatwoot to maintain the message window.",
+    "NATIVE_APP_ADVISORY": "This message was sent from the native app. Reply from Vartana Talk to maintain the message window.",
     "SEND_FAILED": "Couldn't send message! Try again",
     "TRY_AGAIN": "retry",
     "ASSIGNMENT": {
@@ -297,6 +297,13 @@
       "REJECT_CALL": "Reject",
       "JOIN_CALL": "Join call",
       "END_CALL": "End call"
+    },
+    "KANBAN": {
+      "TITLE": "Conversations Kanban",
+      "REFRESH": "Refresh",
+      "LOADING": "Loading kanban",
+      "BACKLOG": "Backlog",
+      "UNNAMED_CONTACT": "Unnamed contact"
     }
   },
   "EMAIL_TRANSCRIPT": {

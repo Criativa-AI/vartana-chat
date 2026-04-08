@@ -1,9 +1,9 @@
 {
   "name": "Chatwoot",
   "description": "Chatwoot is a customer support tool for instant messaging channels",
-  "website": "https://www.chatwoot.com/",
+  "website": "https://www.vartana.ia.br/",
   "repository": "https://github.com/chatwoot/chatwoot",
-  "logo": "https://app.chatwoot.com/brand-assets/logo_thumbnail.svg",
+  "logo": "https://balipark.vartana.ia.br/brand-assets/logo_thumbnail.svg",
   "keywords": [
     "live chat",
     "customer support",
@@ -33,7 +33,7 @@
       "description": "Installation method used for Chatwoot.",
       "value": "heroku"
     },
-    "REDIS_OPENSSL_VERIFY_MODE":{
+    "REDIS_OPENSSL_VERIFY_MODE": {
       "description": "OpenSSL verification mode for Redis connections. ref https://help.heroku.com/HC0F8CUS/redis-connection-issues",
       "value": "none"
     },

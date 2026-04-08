@@ -33,6 +33,14 @@ const GO_TO_COMMANDS = [
     role: ['administrator', 'agent'],
   },
   {
+    id: 'goto_conversations_kanban',
+    title: 'COMMAND_BAR.COMMANDS.GO_TO_CONVERSATIONS_KANBAN',
+    section: 'COMMAND_BAR.SECTIONS.GENERAL',
+    icon: ICON_CONVERSATION_DASHBOARD,
+    path: accountId => `accounts/${accountId}/kanban/general`,
+    role: ['administrator', 'agent'],
+  },
+  {
     id: 'goto_contacts_dashboard',
     title: 'COMMAND_BAR.COMMANDS.GO_TO_CONTACTS_DASHBOARD',
     section: 'COMMAND_BAR.SECTIONS.GENERAL',

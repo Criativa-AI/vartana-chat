@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_24_102005) do
+ActiveRecord::Schema[7.1].define(version: 2026_03_26_174000) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -915,6 +915,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_24_102005) do
     t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "kind", default: 0, null: false
+    t.integer "position", default: 0, null: false
+    t.index ["account_id", "kind", "position"], name: "index_labels_on_account_id_and_kind_and_position"
     t.index ["account_id"], name: "index_labels_on_account_id"
     t.index ["title", "account_id"], name: "index_labels_on_title_and_account_id", unique: true
   end
@@ -1198,6 +1201,38 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_24_102005) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
+  create_table "team_kanban_columns", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "team_kanban_id", null: false
+    t.bigint "label_id", null: false
+    t.integer "position", default: 0, null: false
+    t.string "name_override"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_team_kanban_columns_on_account_id"
+    t.index ["label_id"], name: "index_team_kanban_columns_on_label_id"
+    t.index ["team_kanban_id", "label_id"], name: "index_team_kanban_columns_on_team_kanban_id_and_label_id", unique: true
+    t.index ["team_kanban_id", "position"], name: "index_team_kanban_columns_on_team_kanban_id_and_position"
+    t.index ["team_kanban_id"], name: "index_team_kanban_columns_on_team_kanban_id"
+  end
+
+  create_table "team_kanbans", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "team_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.boolean "is_default", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "position", default: 0, null: false
+    t.bigint "initial_stage_label_id"
+    t.index ["account_id"], name: "index_team_kanbans_on_account_id"
+    t.index ["initial_stage_label_id"], name: "index_team_kanbans_on_initial_stage_label_id"
+    t.index ["team_id", "name"], name: "index_team_kanbans_on_team_id_and_name", unique: true
+    t.index ["team_id", "position"], name: "index_team_kanbans_on_team_id_and_position"
+    t.index ["team_id"], name: "index_team_kanbans_on_team_id"
+  end
+
   create_table "team_members", force: :cascade do |t|
     t.bigint "team_id", null: false
     t.bigint "user_id", null: false
@@ -1291,6 +1326,12 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_24_102005) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "inboxes", "portals"
+  add_foreign_key "team_kanban_columns", "accounts"
+  add_foreign_key "team_kanban_columns", "labels"
+  add_foreign_key "team_kanban_columns", "team_kanbans"
+  add_foreign_key "team_kanbans", "accounts"
+  add_foreign_key "team_kanbans", "labels", column: "initial_stage_label_id"
+  add_foreign_key "team_kanbans", "teams"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").
       after(:insert).

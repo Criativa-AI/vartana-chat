@@ -3,14 +3,14 @@ info:
   title: Chatwoot - Client API
   description: Client API endpoints for Chatwoot
   version: 1.1.0
-  termsOfService: https://www.chatwoot.com/terms-of-service/
+  termsOfService: https://www.vartana.ia.br/terms-of-service/
   contact:
-    email: hello@chatwoot.com
+    email: hello@vartana.ia.br
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
 servers:
-  - url: https://app.chatwoot.com/
+  - url: https://app.vartana.ia.br/
 tags:
   - name: Contacts API
     description: APIs for managing contacts from client applications

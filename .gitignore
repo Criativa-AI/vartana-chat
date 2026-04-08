@@ -26,6 +26,11 @@
 node_modules
 master.key
 *.rdb
+.docs
+.docs/*
+
+# Project documentation (planning, local notes — not versioned)
+/docs/
 
 # Ignore env files
 .env

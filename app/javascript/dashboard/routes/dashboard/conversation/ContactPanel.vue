@@ -6,7 +6,10 @@ import {
   useStore,
 } from 'dashboard/composables/store';
 import { useAccount } from 'dashboard/composables/useAccount';
-import { useUISettings } from 'dashboard/composables/useUISettings';
+import {
+  DEFAULT_CONVERSATION_SIDEBAR_ITEMS_ORDER,
+  useUISettings,
+} from 'dashboard/composables/useUISettings';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 
 import AccordionItem from 'dashboard/components/Accordion/AccordionItem.vue';
@@ -23,6 +26,8 @@ import ShopifyOrdersList from 'dashboard/components/widgets/conversation/Shopify
 import SidebarActionsHeader from 'dashboard/components-next/SidebarActionsHeader.vue';
 import LinearIssuesList from 'dashboard/components/widgets/conversation/linear/IssuesList.vue';
 import LinearSetupCTA from 'dashboard/components/widgets/conversation/linear/LinearSetupCTA.vue';
+
+const emit = defineEmits(['panelClose']);
 
 const props = defineProps({
   conversationId: {
@@ -44,6 +49,36 @@ const {
 
 const dragging = ref(false);
 const conversationSidebarItems = ref([]);
+const sidebarItemNames = DEFAULT_CONVERSATION_SIDEBAR_ITEMS_ORDER.map(
+  item => item.name
+);
+
+const normalizeConversationSidebarItems = items => {
+  const normalized = (items || [])
+    .map(item => {
+      if (typeof item === 'string') {
+        return { name: item };
+      }
+      if (item?.name) {
+        return { name: item.name };
+      }
+      return null;
+    })
+    .filter(item => item && sidebarItemNames.includes(item.name));
+
+  if (!normalized.length) {
+    return [...DEFAULT_CONVERSATION_SIDEBAR_ITEMS_ORDER];
+  }
+
+  const existingNames = new Set(normalized.map(item => item.name));
+  sidebarItemNames.forEach(name => {
+    if (!existingNames.has(name)) {
+      normalized.push({ name });
+    }
+  });
+
+  return normalized;
+};
 
 const shopifyIntegration = useFunctionGetter(
   'integrations/getIntegration',
@@ -119,10 +154,13 @@ const closeContactPanel = () => {
     is_contact_sidebar_open: false,
     is_copilot_panel_open: false,
   });
+  emit('panelClose');
 };
 
 onMounted(() => {
-  conversationSidebarItems.value = conversationSidebarItemsOrder.value;
+  conversationSidebarItems.value = normalizeConversationSidebarItems(
+    conversationSidebarItemsOrder.value
+  );
   getContactDetails();
   store.dispatch('attributes/get', 0);
   // Load integrations to ensure linear integration state is available

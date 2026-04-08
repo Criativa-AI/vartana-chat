@@ -132,6 +132,8 @@ Rails.application.routes.draw do
               get :meta
               get :search
               post :filter
+              get :kanban, to: 'conversations/kanban#index'
+              get :kanban_general, to: 'conversations/kanban#general'
             end
             scope module: :conversations do
               resources :messages, only: [:index, :create, :destroy, :update] do
@@ -159,6 +161,8 @@ Rails.application.routes.draw do
               get :attachments
               get :inbox_assistant
               get :reporting_events if ChatwootApp.enterprise?
+              post :move_stage, to: 'conversations/kanban#move_stage'
+              post :move_status, to: 'conversations/kanban#move_status'
             end
           end
 
@@ -262,6 +266,12 @@ Rails.application.routes.draw do
               collection do
                 delete :destroy
                 patch :update
+              end
+            end
+            scope module: :teams do
+              resources :kanbans, only: [:index, :create, :update, :destroy] do
+                post :set_default, on: :member
+                patch :reorder, on: :collection
               end
             end
           end

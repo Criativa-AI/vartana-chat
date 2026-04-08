@@ -5,6 +5,8 @@
 #  id              :bigint           not null, primary key
 #  color           :string           default("#1f93ff"), not null
 #  description     :text
+#  kind            :integer          default("general"), not null
+#  position        :integer          default(0), not null
 #  show_on_sidebar :boolean
 #  title           :string
 #  created_at      :datetime         not null
@@ -13,14 +15,18 @@
 #
 # Indexes
 #
-#  index_labels_on_account_id            (account_id)
-#  index_labels_on_title_and_account_id  (title,account_id) UNIQUE
+#  index_labels_on_account_id                        (account_id)
+#  index_labels_on_account_id_and_kind_and_position  (account_id,kind,position)
+#  index_labels_on_title_and_account_id              (title,account_id) UNIQUE
 #
 class Label < ApplicationRecord
   include RegexHelper
   include AccountCacheRevalidator
 
   belongs_to :account
+  has_many :team_kanban_columns, dependent: :destroy_async
+
+  enum kind: { general: 0, pipeline_stage: 1 }
 
   validates :title,
             presence: { message: I18n.t('errors.validations.presence') },
@@ -33,6 +39,8 @@ class Label < ApplicationRecord
   before_validation do
     self.title = title.downcase if attribute_present?('title')
   end
+
+  scope :pipeline_stages_ordered, -> { pipeline_stage.order(:position, :title) }
 
   def conversations
     account.conversations.tagged_with(title)

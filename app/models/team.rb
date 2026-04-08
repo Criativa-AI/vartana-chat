@@ -22,6 +22,7 @@ class Team < ApplicationRecord
   has_many :team_members, dependent: :destroy_async
   has_many :members, through: :team_members, source: :user
   has_many :conversations, dependent: :nullify
+  has_many :kanbans, class_name: 'TeamKanban', dependent: :destroy_async
 
   validates :name,
             presence: { message: I18n.t('errors.validations.presence') },
