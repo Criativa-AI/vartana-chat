@@ -437,7 +437,7 @@
       "USER": "Você",
       "ASSISTANT": "Assistente",
       "MESSAGE_PLACEHOLDER": "Digite sua mensagem...",
-      "HEADER": "Playground",
+      "HEADER": "Área de testes",
       "DESCRIPTION": "Use este playground para enviar mensagens para seu assistente e verificar se ele responde com precisão, rápido e no tom que você espera.",
       "CREDIT_NOTE": "As mensagens enviadas aqui usam os créditos do seu Capitão."
     },
@@ -528,7 +528,7 @@
           "ALLOW_CONVERSATION_FAQS": "Gerar perguntas frequentes a partir de conversas resolvidas",
           "ALLOW_MEMORIES": "Capture os principais detalhes como memórias de interações do cliente.",
           "ALLOW_CITATIONS": "Incluir fonte de citações nas respostas",
-          "ALLOW_CONTACT_ATTRIBUTES": "Allow access to contact information"
+          "ALLOW_CONTACT_ATTRIBUTES": "Permitir acesso às informações do contato"
         }
       },
       "EDIT": {
@@ -738,6 +738,17 @@
     "DOCUMENTS": {
       "HEADER": "Documentos",
       "ADD_NEW": "Criar um novo documento",
+      "SELECTED": "{count} selecionado",
+      "SELECT_ALL": "Selecionar todos ({count})",
+      "UNSELECT_ALL": "Desmarcar todos ({count})",
+      "BULK_DELETE_BUTTON": "Excluir",
+      "BULK_DELETE": {
+        "TITLE": "Excluir documentos?",
+        "DESCRIPTION": "Você tem certeza que deseja excluir os documentos selecionados? Esta ação não pode ser desfeita.",
+        "CONFIRM": "Sim, excluir todas",
+        "SUCCESS_MESSAGE": "Documentos excluídos com sucesso",
+        "ERROR_MESSAGE": "Ocorreu um erro ao excluir os documentos, por favor novamente."
+      },
       "RELATED_RESPONSES": {
         "TITLE": "FAQs Relacionadas",
         "DESCRIPTION": "Estes FAQs são gerados diretamente a partir do documento."
@@ -795,6 +806,7 @@
     "CUSTOM_TOOLS": {
       "HEADER": "Ferramentas",
       "ADD_NEW": "Criar ferramenta",
+      "SOFT_LIMIT_WARNING": "Ter mais de 10 ferramentas pode reduzir a confiabilidade do assistente na seleção da ferramenta certa. Considere remover ferramentas não utilizadas para melhores resultados.",
       "EMPTY_STATE": {
         "TITLE": "Não há ferramentas personalizadas disponíveis",
         "SUBTITLE": "Crie ferramentas personalizadas para conectar com APIs e serviços externos, permitindo obter dados e agir por você.",
@@ -825,11 +837,18 @@
         "SUCCESS_MESSAGE": "Ferramenta personalizada excluída com sucesso",
         "ERROR_MESSAGE": "Falha ao excluir a ferramenta personalizada"
       },
+      "TEST": {
+        "BUTTON": "Testar conexão",
+        "SUCCESS": "Endpoint retornou HTTP {status}",
+        "ERROR": "Conexão falhou",
+        "DISABLED_HINT": "Testes estão disponíveis apenas para endpoints que não possuem modelos ou corpos de requisição."
+      },
       "FORM": {
         "TITLE": {
           "LABEL": "Nome da Ferramenta",
           "PLACEHOLDER": "Consulta de pedido",
-          "ERROR": "Nome da ferramente obrigatória"
+          "ERROR": "Nome da ferramente obrigatória",
+          "MAX_LENGTH_ERROR": "O nome da ferramenta deve ter {max} caracteres ou menos"
         },
         "DESCRIPTION": {
           "LABEL": "Descrição",
