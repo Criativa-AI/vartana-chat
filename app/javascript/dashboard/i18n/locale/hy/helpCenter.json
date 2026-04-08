@@ -407,7 +407,7 @@
         "SLUG": {
           "LABEL": "Սլագ",
           "PLACEHOLDER": "Կատեգորիայի slug URL-ների համար",
-          "HELP_TEXT": "app.chatwoot.com/hc/my-portal/en-US/categories/my-slug",
+          "HELP_TEXT": "app.vartana.ia.br/hc/my-portal/en-US/categories/my-slug",
           "ERROR": "Slug-ը պարտադիր է"
         },
         "DESCRIPTION": {
@@ -438,7 +438,7 @@
         "SLUG": {
           "LABEL": "Սլագ",
           "PLACEHOLDER": "Կատեգորիայի սլագ URL-ների համար",
-          "HELP_TEXT": "app.chatwoot.com/hc/my-portal/en-US/categories/my-slug",
+          "HELP_TEXT": "app.vartana.ia.br/hc/my-portal/en-US/categories/my-slug",
           "ERROR": "Սլագը պարտադիր է"
         },
         "DESCRIPTION": {
@@ -622,7 +622,7 @@
             "LABEL": "Սլագ",
             "PLACEHOLDER": "կատեգորիայի slug URL-ների համար",
             "ERROR": "Slug-ը պարտադիր է",
-            "HELP_TEXT": "app.chatwoot.com/hc/{portalSlug}/{localeCode}/categories/{categorySlug}"
+            "HELP_TEXT": "app.vartana.ia.br/hc/{portalSlug}/{localeCode}/categories/{categorySlug}"
           },
           "DESCRIPTION": {
             "LABEL": "Նկարագրություն",

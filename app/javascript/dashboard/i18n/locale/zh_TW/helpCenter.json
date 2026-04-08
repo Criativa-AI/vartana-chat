@@ -407,7 +407,7 @@
         "SLUG": {
           "LABEL": "網址代稱",
           "PLACEHOLDER": "類別的URL Slug",
-          "HELP_TEXT": "app.chatwoot.com/hc/my-portal/en-US/categories/my-slug",
+          "HELP_TEXT": "app.vartana.ia.br/hc/my-portal/en-US/categories/my-slug",
           "ERROR": "Slug 為必填項"
         },
         "DESCRIPTION": {
@@ -438,7 +438,7 @@
         "SLUG": {
           "LABEL": "網址代稱",
           "PLACEHOLDER": "類別的URL Slug",
-          "HELP_TEXT": "app.chatwoot.com/hc/my-portal/en-US/categories/my-slug",
+          "HELP_TEXT": "app.vartana.ia.br/hc/my-portal/en-US/categories/my-slug",
           "ERROR": "Slug 為必填項"
         },
         "DESCRIPTION": {
@@ -622,7 +622,7 @@
             "LABEL": "網址代稱",
             "PLACEHOLDER": "類別的URL Slug",
             "ERROR": "Slug 是必填項",
-            "HELP_TEXT": "app.chatwoot.com/hc/{portalSlug}/{localeCode}/categories/{categorySlug}"
+            "HELP_TEXT": "app.vartana.ia.br/hc/{portalSlug}/{localeCode}/categories/{categorySlug}"
           },
           "DESCRIPTION": {
             "LABEL": "描述資訊",

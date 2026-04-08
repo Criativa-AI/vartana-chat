@@ -293,7 +293,7 @@ export default {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://www.chatwoot.com/docs/product/channels/live-chat/sdk/identity-validation/"
+              href="https://www.vartana.ia.br/docs/product/channels/live-chat/sdk/identity-validation/"
               class="text-n-blue-11 hover:underline text-label-small"
             >
               {{
@@ -384,7 +384,11 @@ export default {
           :label="
             $t('INBOX_MGMT.SETTINGS_POPUP.WHATSAPP_EMBEDDED_SIGNUP_TITLE')
           "
-          :help-text="`${$t('INBOX_MGMT.SETTINGS_POPUP.WHATSAPP_EMBEDDED_SIGNUP_SUBHEADER')} ${$t('INBOX_MGMT.SETTINGS_POPUP.WHATSAPP_EMBEDDED_SIGNUP_DESCRIPTION')}`"
+          :help-text="`${$t(
+            'INBOX_MGMT.SETTINGS_POPUP.WHATSAPP_EMBEDDED_SIGNUP_SUBHEADER'
+          )} ${$t(
+            'INBOX_MGMT.SETTINGS_POPUP.WHATSAPP_EMBEDDED_SIGNUP_DESCRIPTION'
+          )}`"
         >
           <div class="flex flex-col gap-1 items-start">
             <NextButton @click="handleReconfigure">

@@ -407,7 +407,7 @@
         "SLUG": {
           "LABEL": "Slug",
           "PLACEHOLDER": "Categoria slug para URLs",
-          "HELP_TEXT": "app.chatwoot.com/hc/meu-portal/en-US/categorias/meu-slug",
+          "HELP_TEXT": "app.vartana.ia.br/hc/meu-portal/en-US/categorias/meu-slug",
           "ERROR": "Slug obrigatória"
         },
         "DESCRIPTION": {
@@ -438,7 +438,7 @@
         "SLUG": {
           "LABEL": "Slug",
           "PLACEHOLDER": "Categoria slug para URLs",
-          "HELP_TEXT": "app.chatwoot.com/hc/meu-portal/en-US/categorias/meu-slug",
+          "HELP_TEXT": "app.vartana.ia.br/hc/meu-portal/en-US/categorias/meu-slug",
           "ERROR": "Slug é obrigatório"
         },
         "DESCRIPTION": {
@@ -622,7 +622,7 @@
             "LABEL": "Slug",
             "PLACEHOLDER": "Categoria slug para URLs",
             "ERROR": "Slug obrigatória",
-            "HELP_TEXT": "app.chatwoot.com/hc/{portalSlug}/{localeCode}/categories/{categorySlug}"
+            "HELP_TEXT": "app.vartana.ia.br/hc/{portalSlug}/{localeCode}/categories/{categorySlug}"
           },
           "DESCRIPTION": {
             "LABEL": "Descrição",
