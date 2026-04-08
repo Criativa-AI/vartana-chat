@@ -5,7 +5,7 @@ import {
   OPERATOR_TYPES_6,
 } from './operators';
 
-export const AUTOMATIONS = {
+const AUTOMATIONS = {
   message_created: {
     conditions: [
       {
@@ -83,6 +83,10 @@ export const AUTOMATIONS = {
       {
         key: 'assign_team',
         name: 'ASSIGN_TEAM',
+      },
+      {
+        key: 'crm_move_to_pipeline_stage',
+        name: 'MOVE_CRM_PIPELINE_STAGE',
       },
       {
         key: 'add_label',
@@ -211,6 +215,10 @@ export const AUTOMATIONS = {
       {
         key: 'assign_team',
         name: 'ASSIGN_TEAM',
+      },
+      {
+        key: 'crm_move_to_pipeline_stage',
+        name: 'MOVE_CRM_PIPELINE_STAGE',
       },
       {
         key: 'assign_agent',
@@ -345,6 +353,10 @@ export const AUTOMATIONS = {
         name: 'ASSIGN_TEAM',
       },
       {
+        key: 'crm_move_to_pipeline_stage',
+        name: 'MOVE_CRM_PIPELINE_STAGE',
+      },
+      {
         key: 'assign_agent',
         name: 'ASSIGN_AGENT',
       },
@@ -471,6 +483,10 @@ export const AUTOMATIONS = {
         name: 'ASSIGN_TEAM',
       },
       {
+        key: 'crm_move_to_pipeline_stage',
+        name: 'MOVE_CRM_PIPELINE_STAGE',
+      },
+      {
         key: 'assign_agent',
         name: 'ASSIGN_AGENT',
       },
@@ -587,6 +603,10 @@ export const AUTOMATIONS = {
         name: 'ASSIGN_TEAM',
       },
       {
+        key: 'crm_move_to_pipeline_stage',
+        name: 'MOVE_CRM_PIPELINE_STAGE',
+      },
+      {
         key: 'send_email_to_team',
         name: 'SEND_EMAIL_TO_TEAM',
       },
@@ -610,6 +630,18 @@ export const AUTOMATIONS = {
   },
 };
 
+AUTOMATIONS.crm_pipeline_stage_changed = structuredClone(AUTOMATIONS.conversation_updated);
+const pipelineConditions = AUTOMATIONS.crm_pipeline_stage_changed.conditions;
+const pipelineLabelsIndex = pipelineConditions.findIndex(c => c.key === 'labels');
+if (pipelineLabelsIndex > 0) {
+  const [labelsCondition] = pipelineConditions.splice(pipelineLabelsIndex, 1);
+  pipelineConditions.unshift(labelsCondition);
+}
+
+AUTOMATIONS.crm_status_changed = structuredClone(AUTOMATIONS.conversation_updated);
+
+export { AUTOMATIONS };
+
 export const AUTOMATION_RULE_EVENTS = [
   {
     key: 'conversation_created',
@@ -618,6 +650,14 @@ export const AUTOMATION_RULE_EVENTS = [
   {
     key: 'conversation_updated',
     value: 'CONVERSATION_UPDATED',
+  },
+  {
+    key: 'crm_pipeline_stage_changed',
+    value: 'CRM_PIPELINE_STAGE_CHANGED',
+  },
+  {
+    key: 'crm_status_changed',
+    value: 'CRM_STATUS_CHANGED',
   },
   {
     key: 'conversation_resolved',
@@ -653,6 +693,11 @@ export const AUTOMATION_ACTION_TYPES = [
     key: 'remove_label',
     label: 'REMOVE_LABEL',
     inputType: 'multi_select',
+  },
+  {
+    key: 'crm_move_to_pipeline_stage',
+    label: 'MOVE_CRM_PIPELINE_STAGE',
+    inputType: 'crm_pipeline_move',
   },
   {
     key: 'send_email_to_team',

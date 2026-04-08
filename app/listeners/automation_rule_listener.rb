@@ -1,6 +1,7 @@
 class AutomationRuleListener < BaseListener
   def conversation_updated(event)
     process_conversation_event(event, 'conversation_updated')
+    process_crm_automation_events(event)
   end
 
   def conversation_created(event)
@@ -35,6 +36,21 @@ class AutomationRuleListener < BaseListener
   end
 
   private
+
+  def process_crm_automation_events(event)
+    conversation = event.data[:conversation]
+    account = conversation.account
+    changed = event.data[:changed_attributes]
+    return if changed.blank?
+
+    changed_keys = changed.keys.map(&:to_s)
+    if changed_keys.include?('label_list') && rule_present?('crm_pipeline_stage_changed', account)
+      process_conversation_event(event, 'crm_pipeline_stage_changed')
+    end
+    if changed_keys.include?('status') && rule_present?('crm_status_changed', account)
+      process_conversation_event(event, 'crm_status_changed')
+    end
+  end
 
   def process_conversation_event(event, event_name)
     return if performed_by_automation?(event)

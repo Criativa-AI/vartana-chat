@@ -97,9 +97,15 @@
     "ACTION": {
       "DELETE_MESSAGE": "É necessário ter, pelo menos, uma ação para guardar",
       "TEAM_MESSAGE_INPUT_PLACEHOLDER": "Introduza aqui a sua mensagem",
-      "TEAM_DROPDOWN_PLACEHOLDER": "Selecionar equipas",
+      "TEAM_DROPDOWN_PLACEHOLDER": "Selecionar squads",
       "EMAIL_INPUT_PLACEHOLDER": "Inserir e-mail",
-      "URL_INPUT_PLACEHOLDER": "Inserir URL"
+      "URL_INPUT_PLACEHOLDER": "Inserir URL",
+      "CRM_MOVE_KEEP_TEAM": "Manter o squad atual",
+      "CRM_MOVE_TEAM_LABEL": "Atribuir squad (opcional)",
+      "CRM_MOVE_TEAM_PLACEHOLDER": "Escolher squad",
+      "CRM_MOVE_STAGE_LABEL": "Etapa de destino (etiqueta)",
+      "CRM_MOVE_STAGE_PLACEHOLDER": "Escolher etiqueta de etapa",
+      "CRM_MOVE_HELP": "Atualiza a conversa como ao arrastar um cartão no CRM por squad: as etiquetas de etapa são substituídas e pode atribuir outro squad para o registo aparecer no quadro desse squad. Use com o evento «CRM — etapa do pipeline alterada» e condições de squad e etiquetas para encaminhar entre funis."
     },
     "TOGGLE": {
       "ACTIVATION_TITLE": "Ativar regra de automação",
@@ -133,16 +139,19 @@
     "EVENTS": {
       "CONVERSATION_CREATED": "Conversa criada",
       "CONVERSATION_UPDATED": "Conversa atualizada",
+      "CRM_PIPELINE_STAGE_CHANGED": "CRM — etapa do pipeline alterada (quadro CRM por squad)",
+      "CRM_STATUS_CHANGED": "CRM — estado da conversa alterado (quadro por estado)",
       "MESSAGE_CREATED": "Mensagem criada",
-      "CONVERSATION_RESOLVED": "Conversation Resolved",
+      "CONVERSATION_RESOLVED": "Conversa resolvida",
       "CONVERSATION_OPENED": "Conversa aberta"
     },
     "ACTIONS": {
       "ASSIGN_AGENT": "Atribuir ao agente",
-      "ASSIGN_TEAM": "Atribuir equipa",
+      "ASSIGN_TEAM": "Atribuir squad",
+      "MOVE_CRM_PIPELINE_STAGE": "Mover para etapa do pipeline CRM (squad + etiqueta)",
       "ADD_LABEL": "Adicionar etiqueta",
       "REMOVE_LABEL": "Remover um rótulo",
-      "SEND_EMAIL_TO_TEAM": "Enviar um e-mail para a equipa",
+      "SEND_EMAIL_TO_TEAM": "Enviar um e-mail ao squad",
       "SEND_EMAIL_TRANSCRIPT": "Enviar transcrição por e-mail",
       "MUTE_CONVERSATION": "Silenciar Conversa",
       "SNOOZE_CONVERSATION": "Adiar conversa",
@@ -180,7 +189,7 @@
       "COUNTRY_NAME": "País",
       "REFERER_LINK": "Link de referência",
       "ASSIGNEE_NAME": "Atribuído",
-      "TEAM_NAME": "Equipa",
+      "TEAM_NAME": "Squad",
       "PRIORITY": "Prioridade",
       "LABELS": "Etiquetas"
     }

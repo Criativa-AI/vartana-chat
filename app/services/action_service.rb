@@ -59,6 +59,33 @@ class ActionService
     @conversation.update(label_list: labels)
   end
 
+  def crm_move_to_pipeline_stage(params)
+    team_param = params[0]
+    label_param = params[1]
+    return if label_param.blank?
+
+    label = @account.labels.find_by(id: label_param.to_i)
+    return if label.blank?
+
+    new_team_id = if team_param.blank? || %w[nil 0].include?(team_param.to_s)
+                    nil
+                  else
+                    team_param.to_i
+                  end
+
+    if new_team_id.present?
+      return unless team_belongs_to_account?([new_team_id])
+
+      @conversation.update!(team_id: new_team_id)
+    end
+
+    @conversation.reload
+    Conversations::PipelineStageService.new(
+      conversation: @conversation,
+      account: @account
+    ).assign_stage!(label.id)
+  end
+
   def assign_team(team_ids = [])
     # FIXME: The explicit checks for zero or nil (string) is bad. Move
     # this to a separate unassign action.

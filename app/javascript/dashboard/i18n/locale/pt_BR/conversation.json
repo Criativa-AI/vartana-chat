@@ -116,7 +116,7 @@
     },
     "MENTION": {
       "AGENTS": "Agentes",
-      "TEAMS": "Times"
+      "TEAMS": "Squads"
     },
     "CUSTOM_SNOOZE": {
       "TITLE": "Adiar até",
@@ -160,7 +160,7 @@
       "ASSIGN_AGENT": "Atribuir Agente",
       "ASSIGN_LABEL": "Atribuir etiqueta",
       "AGENTS_LOADING": "Carregando agentes...",
-      "ASSIGN_TEAM": "Atribuir time",
+      "ASSIGN_TEAM": "Atribuir squad",
       "DELETE": "Excluir conversa",
       "OPEN_IN_NEW_TAB": "Abrir em nova aba",
       "COPY_LINK": "Copiar link da conversa",
@@ -179,8 +179,8 @@
           "FAILED": "Não foi possível remover a etiqueta. Por favor, tente novamente."
         },
         "TEAM_ASSIGNMENT": {
-          "SUCCESFUL": "Time {team} atribuído para o id de conversa {conversationId}",
-          "FAILED": "Não foi possível atribuir time. Por favor, tente novamente."
+          "SUCCESFUL": "Squad \"{team}\" atribuído à conversa de ID {conversationId}",
+          "FAILED": "Não foi possível atribuir squad. Por favor, tente novamente."
         }
       }
     },
@@ -245,14 +245,14 @@
         "EXPAND": "Expandir a prévia"
       }
     },
-    "VISIBLE_TO_AGENTS": "Mensagem Privada: Apenas visível para você e seu time",
+    "VISIBLE_TO_AGENTS": "Mensagem privada: apenas visível para você e seu squad",
     "CHANGE_STATUS": "Estado da conversa mudou",
     "CHANGE_STATUS_FAILED": "Mudança de status da conversa falhou",
     "CHANGE_AGENT": "Novo agente atribuído",
     "CHANGE_AGENT_FAILED": "Falha ao atribuir outro agente",
     "ASSIGN_LABEL_SUCCESFUL": "Etiqueta atribuída com sucesso",
     "ASSIGN_LABEL_FAILED": "Falha ao atribuir etiqueta",
-    "CHANGE_TEAM": "Status da conversa mudou",
+    "CHANGE_TEAM": "Squad da conversa alterado",
     "SUCCESS_DELETE_CONVERSATION": "Conversa excluída com sucesso",
     "FAIL_DELETE_CONVERSATION": "Não foi possível excluir a conversa! Tente novamente",
     "FILE_SIZE_LIMIT": "O arquivo excede os {MAXIMUM_SUPPORTED_FILE_UPLOAD_SIZE} MB do limite para anexos",
@@ -297,6 +297,67 @@
       "REJECT_CALL": "Recusar",
       "JOIN_CALL": "Entrar na chamada",
       "END_CALL": "Encerrar chamada"
+    },
+    "KANBAN": {
+      "TITLE": "CRM de conversas",
+      "GENERAL_TITLE": "Quadro por status",
+      "REFRESH": "Atualizar",
+      "LOADING": "Carregando o CRM",
+      "BACKLOG": "Backlog",
+      "UNNAMED_CONTACT": "Contato sem nome",
+      "SUBTITLE_GENERAL": "Monitore todas as conversas abertas pelo ciclo de status.",
+      "SUBTITLE_TEAM": "Funil por etapa. Arraste os cartões para avançar negócios.",
+      "REF_LABEL": "Ref.",
+      "INBOX": "Caixa de entrada",
+      "TEAM": "Squad",
+      "OWNER": "Responsável",
+      "LAST_ACTIVITY": "Última atividade",
+      "STAGE_TOTAL": "{count} nesta etapa",
+      "CRM_BADGE": "Pipeline",
+      "AUTOMATIONS": "Automações",
+      "AUTOMATIONS_HINT_TEAM": "Ao arrastar um cartão, as etiquetas de etapa são atualizadas na conversa. Em Automações, use o evento «CRM — etapa do funil alterada» com condições de squad e etiquetas e, nas ações, «Mover para etapa do pipeline CRM» para entregar o registro em outro quadro ou squad.",
+      "AUTOMATIONS_HINT_GENERAL": "Ao arrastar um cartão, o status da conversa é atualizado (aberta / pendente / resolvida). Use o evento «CRM — status da conversa alterado» com uma condição de Status para automatizar quando o cartão muda de coluna.",
+      "TAGS_MORE": "+{count}",
+      "BACK_TO_LIST": "Voltar aos quadros",
+      "DETAILS_TITLE": "Registro",
+      "OPEN_CONVERSATION": "Abrir conversa",
+      "CLOSE": "Fechar",
+      "LOADING_DETAILS": "Carregando registro…",
+      "DETAILS_ERROR": "Não foi possível carregar os detalhes completos deste registro.",
+      "HUB": {
+        "TITLE": "Pipelines por squad",
+        "SUBTITLE": "Escolha um quadro para abrir o pipeline no estilo CRM.",
+        "NEW": "Novo quadro",
+        "SEARCH_PLACEHOLDER": "Buscar squad ou quadro",
+        "LOADING": "Carregando quadros…",
+        "STAGES": "{count} etapas",
+        "NO_DESCRIPTION": "Sem descrição",
+        "DEFAULT": "Padrão",
+        "RECENT": "Recente",
+        "OPEN": "Abrir",
+        "EDIT": "Editar",
+        "SET_DEFAULT": "Definir como padrão",
+        "DELETE": "Excluir",
+        "CREATE_TITLE": "Novo quadro",
+        "EDIT_TITLE": "Editar quadro",
+        "CREATE_DESC": "Configure as etapas deste pipeline do squad.",
+        "SAVE": "Salvar",
+        "CANCEL": "Cancelar",
+        "FIELD_TEAM": "Squad",
+        "FIELD_NAME": "Nome",
+        "FIELD_DESCRIPTION": "Descrição",
+        "STAGES_LABEL": "Etapas a partir de etiquetas",
+        "NEW_LABEL_PLACEHOLDER": "Criar nova etiqueta",
+        "ADD_LABEL": "Adicionar etiqueta",
+        "AVAILABLE_LABELS": "Etiquetas disponíveis",
+        "NO_AVAILABLE_LABELS": "Não há etiquetas disponíveis",
+        "STAGE_ORDER": "Ordem do funil",
+        "ADD_ONE_STAGE": "Adicione pelo menos uma etapa",
+        "INITIAL_STAGE_HINT": "Use o botão circular para definir a etapa de entrada.",
+        "REMOVE": "Remover",
+        "DELETE_TITLE": "Excluir quadro",
+        "DELETE_CONFIRM": "Tem certeza de que deseja excluir este quadro?"
+      }
     }
   },
   "EMAIL_TRANSCRIPT": {
@@ -348,7 +409,7 @@
   "CONVERSATION_SIDEBAR": {
     "ASSIGNEE_LABEL": "Agente atribuído",
     "SELF_ASSIGN": "Atribuir a mim",
-    "TEAM_LABEL": "Time atribuído",
+    "TEAM_LABEL": "Squad atribuído",
     "SELECT": {
       "PLACEHOLDER": "Nenhuma"
     },

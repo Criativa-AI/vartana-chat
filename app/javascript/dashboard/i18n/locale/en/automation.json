@@ -97,9 +97,15 @@
     "ACTION": {
       "DELETE_MESSAGE": "You need to have atleast one action to save",
       "TEAM_MESSAGE_INPUT_PLACEHOLDER": "Enter your message here",
-      "TEAM_DROPDOWN_PLACEHOLDER": "Select teams",
+      "TEAM_DROPDOWN_PLACEHOLDER": "Select squads",
       "EMAIL_INPUT_PLACEHOLDER": "Enter email",
-      "URL_INPUT_PLACEHOLDER": "Enter URL"
+      "URL_INPUT_PLACEHOLDER": "Enter URL",
+      "CRM_MOVE_KEEP_TEAM": "Keep current squad",
+      "CRM_MOVE_TEAM_LABEL": "Assign squad (optional)",
+      "CRM_MOVE_TEAM_PLACEHOLDER": "Select squad",
+      "CRM_MOVE_STAGE_LABEL": "Target stage (label)",
+      "CRM_MOVE_STAGE_PLACEHOLDER": "Select a stage label",
+      "CRM_MOVE_HELP": "Updates the conversation the same way as dragging a card on the squad CRM board: stage labels are replaced and you can optionally assign another squad so the record shows up on that squad’s board. Use with event «CRM — pipeline stage changed» plus squad and label conditions to hand off between funnels."
     },
     "TOGGLE": {
       "ACTIVATION_TITLE": "Activate Automation Rule",
@@ -133,16 +139,19 @@
     "EVENTS": {
       "CONVERSATION_CREATED": "Conversation Created",
       "CONVERSATION_UPDATED": "Conversation Updated",
+      "CRM_PIPELINE_STAGE_CHANGED": "CRM — pipeline stage changed (squad CRM board)",
+      "CRM_STATUS_CHANGED": "CRM — conversation status changed (status board)",
       "MESSAGE_CREATED": "Message Created",
       "CONVERSATION_RESOLVED": "Conversation Resolved",
       "CONVERSATION_OPENED": "Conversation Opened"
     },
     "ACTIONS": {
       "ASSIGN_AGENT": "Assign to Agent",
-      "ASSIGN_TEAM": "Assign a Team",
+      "ASSIGN_TEAM": "Assign a squad",
+      "MOVE_CRM_PIPELINE_STAGE": "Move to CRM pipeline stage (squad + label)",
       "ADD_LABEL": "Add a Label",
       "REMOVE_LABEL": "Remove a Label",
-      "SEND_EMAIL_TO_TEAM": "Send an Email to Team",
+      "SEND_EMAIL_TO_TEAM": "Send an Email to Squad",
       "SEND_EMAIL_TRANSCRIPT": "Send an Email Transcript",
       "MUTE_CONVERSATION": "Mute Conversation",
       "SNOOZE_CONVERSATION": "Snooze Conversation",
@@ -180,7 +189,7 @@
       "COUNTRY_NAME": "Country",
       "REFERER_LINK": "Referrer Link",
       "ASSIGNEE_NAME": "Assignee",
-      "TEAM_NAME": "Team",
+      "TEAM_NAME": "Squad",
       "PRIORITY": "Priority",
       "LABELS": "Labels"
     }
