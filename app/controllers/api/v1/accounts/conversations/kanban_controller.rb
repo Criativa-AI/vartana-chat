@@ -1,4 +1,6 @@
 class Api::V1::Accounts::Conversations::KanbanController < Api::V1::Accounts::BaseController
+  include ConversationsCrmFeatureGate
+
   BACKLOG_COLUMN_TITLE = 'backlog'.freeze
   GENERAL_STATUSES = %w[open pending snoozed resolved].freeze
   before_action :set_conversation, only: [:move_stage, :move_status]

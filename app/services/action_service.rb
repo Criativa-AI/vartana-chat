@@ -60,6 +60,8 @@ class ActionService
   end
 
   def crm_move_to_pipeline_stage(params)
+    return unless @account.conversations_crm_enabled?
+
     team_param = params[0]
     label_param = params[1]
     return if label_param.blank?

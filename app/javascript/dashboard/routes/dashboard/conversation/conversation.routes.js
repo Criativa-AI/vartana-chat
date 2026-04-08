@@ -1,5 +1,6 @@
 /* eslint arrow-body-style: 0 */
 import { frontendURL } from '../../../helper/URLHelper';
+import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import ConversationView from './ConversationView.vue';
 import KanbanView from './KanbanView.vue';
 import KanbanTeamsHubView from './KanbanTeamsHubView.vue';
@@ -19,6 +20,7 @@ export default {
       name: 'kanban_general',
       meta: {
         permissions: CONVERSATION_PERMISSIONS,
+        featureFlag: FEATURE_FLAGS.CONVERSATIONS_CRM,
       },
       component: KanbanView,
     },
@@ -27,6 +29,7 @@ export default {
       name: 'kanban_teams_hub',
       meta: {
         permissions: CONVERSATION_PERMISSIONS,
+        featureFlag: FEATURE_FLAGS.CONVERSATIONS_CRM,
       },
       component: KanbanTeamsHubView,
     },
@@ -35,6 +38,7 @@ export default {
       name: 'kanban_team_board',
       meta: {
         permissions: CONVERSATION_PERMISSIONS,
+        featureFlag: FEATURE_FLAGS.CONVERSATIONS_CRM,
       },
       component: KanbanView,
     },

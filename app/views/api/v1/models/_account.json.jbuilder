@@ -18,7 +18,9 @@ if resource.custom_attributes.present?
   end
 end
 json.domain @account.domain
-json.features @account.enabled_features
+json.features @account.enabled_features.merge(
+  'conversations_crm' => @account.conversations_crm_enabled?
+)
 json.id @account.id
 json.locale @account.locale
 json.name @account.name

@@ -1,4 +1,6 @@
 class Api::V1::Accounts::Teams::KanbansController < Api::V1::Accounts::BaseController
+  include ConversationsCrmFeatureGate
+
   before_action :set_team
   before_action :set_kanban, only: [:update, :destroy, :set_default]
 

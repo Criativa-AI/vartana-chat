@@ -175,12 +175,7 @@ const handleCollapsedClick = () => {
 };
 
 const toggleTrigger = () => {
-  if (
-    hasAccessibleChildren.value &&
-    !isExpanded.value &&
-    !hasActiveChild.value
-  ) {
-    // if not already expanded, navigate to the first child
+  if (hasAccessibleChildren.value) {
     const firstItem = accessibleItems.value[0];
     router.push(firstItem.to);
   }

@@ -30,6 +30,9 @@ json.accounts do
     # availability derived from presence
     json.availability_status account_user.availability_status
     json.auto_offline account_user.auto_offline
+    json.features account_user.account.enabled_features.merge(
+      'conversations_crm' => account_user.account.conversations_crm_enabled?
+    )
     json.partial! 'api/v1/models/account_user', account_user: account_user if ChatwootApp.enterprise?
   end
 end

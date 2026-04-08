@@ -36,6 +36,7 @@ const GO_TO_COMMANDS = [
     id: 'goto_conversations_kanban',
     title: 'COMMAND_BAR.COMMANDS.GO_TO_CONVERSATIONS_KANBAN',
     section: 'COMMAND_BAR.SECTIONS.GENERAL',
+    featureFlag: FEATURE_FLAGS.CONVERSATIONS_CRM,
     icon: ICON_CONVERSATION_DASHBOARD,
     path: accountId => `accounts/${accountId}/kanban/general`,
     role: ['administrator', 'agent'],

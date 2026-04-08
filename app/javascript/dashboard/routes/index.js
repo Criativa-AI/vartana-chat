@@ -31,7 +31,11 @@ export const validateAuthenticateRoutePermission = (to, next) => {
     return next(frontendURL(`accounts/${accountId}/dashboard`));
   }
 
-  const nextRoute = validateLoggedInRoutes(to, store.getters.getCurrentUser);
+  const nextRoute = validateLoggedInRoutes(
+    to,
+    store.getters.getCurrentUser,
+    store.getters['accounts/getAccount']
+  );
   return nextRoute ? next(frontendURL(nextRoute)) : next();
 };
 

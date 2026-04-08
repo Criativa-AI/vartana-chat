@@ -31,6 +31,10 @@
 
 en:
   hello: 'Hello world'
+  activerecord:
+    attributes:
+      account:
+        conversations_crm: 'Conversations CRM (pipeline & boards)'
   inbox:
     reauthorization:
       success: 'Channel reauthorized successfully'

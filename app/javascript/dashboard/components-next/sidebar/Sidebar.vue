@@ -161,6 +161,12 @@ const inboxes = useMapGetter('inboxes/getInboxes');
 const labels = useMapGetter('labels/getLabelsOnSidebar');
 const teams = useMapGetter('teams/getMyTeams');
 const hasTeamKanbanAccess = computed(() => teams.value.length > 0);
+const hasConversationsCrm = computed(() =>
+  isFeatureEnabledonAccount.value(
+    accountId.value,
+    FEATURE_FLAGS.CONVERSATIONS_CRM
+  )
+);
 const contactCustomViews = useMapGetter('customViews/getContactCustomViews');
 const conversationCustomViews = useMapGetter(
   'customViews/getConversationCustomViews'
@@ -316,29 +322,33 @@ const menuItems = computed(() => {
         },
       ],
     },
-    {
-      name: 'CRM',
-      label: t('SIDEBAR.KANBAN'),
-      icon: 'i-lucide-columns-3',
-      children: [
-        {
-          name: 'CRM overview',
-          label: t('SIDEBAR.KANBAN_GENERAL'),
-          activeOn: ['kanban_general'],
-          to: accountScopedRoute('kanban_general'),
-        },
-        ...(hasTeamKanbanAccess.value
-          ? [
+    ...(hasConversationsCrm.value
+      ? [
+          {
+            name: 'CRM',
+            label: t('SIDEBAR.KANBAN'),
+            icon: 'i-lucide-columns-3',
+            children: [
               {
-                name: 'CRM squads',
-                label: t('SIDEBAR.KANBAN_TEAMS'),
-                activeOn: ['kanban_teams_hub', 'kanban_team_board'],
-                to: accountScopedRoute('kanban_teams_hub'),
+                name: 'CRM overview',
+                label: t('SIDEBAR.KANBAN_GENERAL'),
+                activeOn: ['kanban_general'],
+                to: accountScopedRoute('kanban_general'),
               },
-            ]
-          : []),
-      ],
-    },
+              ...(hasTeamKanbanAccess.value
+                ? [
+                    {
+                      name: 'CRM squads',
+                      label: t('SIDEBAR.KANBAN_TEAMS'),
+                      activeOn: ['kanban_teams_hub', 'kanban_team_board'],
+                      to: accountScopedRoute('kanban_teams_hub'),
+                    },
+                  ]
+                : []),
+            ],
+          },
+        ]
+      : []),
     {
       name: 'Captain',
       icon: 'i-woot-captain',

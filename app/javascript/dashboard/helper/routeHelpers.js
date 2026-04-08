@@ -11,6 +11,13 @@ import {
   REPORTS_PERMISSIONS,
   PORTAL_PERMISSIONS,
 } from 'dashboard/constants/permissions.js';
+import { FEATURE_FLAGS } from 'dashboard/featureFlags';
+
+const CONVERSATIONS_CRM_ROUTE_NAMES = [
+  'kanban_general',
+  'kanban_teams_hub',
+  'kanban_team_board',
+];
 
 export const routeIsAccessibleFor = (route, userPermissions = []) => {
   const { meta: { permissions: routePermissions = [] } = {} } = route;
@@ -37,7 +44,7 @@ export const defaultRedirectPage = (to, permissions) => {
   return `accounts/${accountId}/${route ? route.path : 'dashboard'}`;
 };
 
-const validateActiveAccountRoutes = (to, user) => {
+const validateActiveAccountRoutes = (to, user, getAccountRecord) => {
   // If the current account is active, then check for the route permissions
   const accountDashboardURL = `accounts/${to.params.accountId}/dashboard`;
 
@@ -49,11 +56,33 @@ const validateActiveAccountRoutes = (to, user) => {
   const userPermissions = getUserPermissions(user, to.params.accountId);
 
   const isAccessible = routeIsAccessibleFor(to, userPermissions);
-  // If the route is not accessible for the user, return to dashboard screen
-  return isAccessible ? null : defaultRedirectPage(to, userPermissions);
+  if (!isAccessible) {
+    return defaultRedirectPage(to, userPermissions);
+  }
+
+  if (CONVERSATIONS_CRM_ROUTE_NAMES.includes(to.name)) {
+    const accountId = Number(to.params.accountId);
+    const userAccount = getCurrentAccount(user, accountId);
+    const storeAccount = getAccountRecord?.(accountId) || {};
+    const fromStore =
+      storeAccount.features?.[FEATURE_FLAGS.CONVERSATIONS_CRM];
+    const fromUser =
+      userAccount?.features?.[FEATURE_FLAGS.CONVERSATIONS_CRM];
+    const conversationsCrmEnabled =
+      fromStore !== undefined
+        ? fromStore
+        : fromUser !== undefined
+          ? fromUser
+          : true;
+    if (!conversationsCrmEnabled) {
+      return defaultRedirectPage(to, userPermissions);
+    }
+  }
+
+  return null;
 };
 
-export const validateLoggedInRoutes = (to, user) => {
+export const validateLoggedInRoutes = (to, user, getAccountRecord) => {
   const currentAccount = getCurrentAccount(user, Number(to.params.accountId));
   // If current account is missing, either user does not have
   // access to the account or the account is deleted, return to login screen
@@ -64,7 +93,7 @@ export const validateLoggedInRoutes = (to, user) => {
   const isCurrentAccountActive = currentAccount.status === 'active';
 
   if (isCurrentAccountActive) {
-    return validateActiveAccountRoutes(to, user);
+    return validateActiveAccountRoutes(to, user, getAccountRecord);
   }
 
   // If the current account is not active, then redirect the user to the suspended screen

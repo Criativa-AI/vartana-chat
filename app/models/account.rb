@@ -69,7 +69,8 @@ class Account < ApplicationRecord
             'help_center_search': { 'type': %w[boolean null] }
           },
           'additionalProperties': false
-        }
+        },
+        'conversations_crm': { 'type': %w[boolean null] }
       },
     'required': [],
     'additionalProperties': true
@@ -95,6 +96,22 @@ class Account < ApplicationRecord
   store_accessor :settings, :keep_pending_on_bot_failure
   store_accessor :settings, :captain_auto_resolve_mode
   include AccountCaptainAutoResolve
+
+  def conversations_crm
+    v = settings&.dig('conversations_crm')
+    return true if v.nil?
+
+    ActiveModel::Type::Boolean.new.cast(v)
+  end
+
+  def conversations_crm=(value)
+    bool = ActiveModel::Type::Boolean.new.cast(value)
+    self.settings = (settings || {}).stringify_keys.merge('conversations_crm' => bool)
+  end
+
+  def conversations_crm_enabled?
+    conversations_crm
+  end
 
   has_many :account_users, dependent: :destroy_async
   has_many :agent_bot_inboxes, dependent: :destroy_async
