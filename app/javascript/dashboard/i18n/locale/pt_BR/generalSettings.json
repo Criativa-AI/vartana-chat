@@ -201,6 +201,7 @@
     },
     "COMMANDS": {
       "GO_TO_CONVERSATION_DASHBOARD": "Ir para Painel de Conversação",
+      "GO_TO_CONVERSATIONS_KANBAN": "Ir para o Kanban de conversas",
       "GO_TO_CONTACTS_DASHBOARD": "Ir para Painel de Contatos",
       "GO_TO_REPORTS_OVERVIEW": "Ir para Resumo de Relatórios",
       "GO_TO_CONVERSATION_REPORTS": "Ir para Relatórios das Conversas",

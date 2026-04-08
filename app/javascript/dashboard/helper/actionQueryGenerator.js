@@ -8,13 +8,25 @@ const allElementsNumbers = arr => {
 
 const formatArray = params => {
   if (params.length <= 0) {
-    params = [];
-  } else if (allElementsString(params) || allElementsNumbers(params)) {
-    params = [...params];
-  } else {
-    params = params.map(val => val.id);
+    return [];
   }
-  return params;
+
+  const primitivesOnly = params.every(
+    elem =>
+      elem === null ||
+      elem === undefined ||
+      typeof elem === 'string' ||
+      typeof elem === 'number'
+  );
+
+  if (primitivesOnly) {
+    return [...params];
+  }
+
+  return params.map(val => {
+    if (val && typeof val === 'object' && 'id' in val) return val.id;
+    return val;
+  });
 };
 
 const generatePayloadForObject = item => {

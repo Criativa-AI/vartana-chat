@@ -120,6 +120,8 @@ export const validateConditions = conditions => {
  * @param {Object} action - The action to validate.
  * @returns {string|null} An error message if validation fails, or null if validation passes.
  */
+const CRM_STAGE_PLACEHOLDER = '__crm_no_stage__';
+
 const validateSingleAction = action => {
   const noParamActions = [
     'mute_conversation',
@@ -129,6 +131,27 @@ const validateSingleAction = action => {
     'open_conversation',
     'pending_conversation',
   ];
+
+  if (action.action_name === 'crm_move_to_pipeline_stage') {
+    const p = action.action_params;
+    if (!Array.isArray(p) || p.length < 2) {
+      return ACTION_PARAMETERS_REQUIRED;
+    }
+    const rawLabel = p[1];
+    const labelId =
+      rawLabel && typeof rawLabel === 'object' && 'id' in rawLabel
+        ? rawLabel.id
+        : rawLabel;
+    if (
+      labelId === null ||
+      labelId === undefined ||
+      labelId === '' ||
+      labelId === CRM_STAGE_PLACEHOLDER
+    ) {
+      return ACTION_PARAMETERS_REQUIRED;
+    }
+    return null;
+  }
 
   if (
     !noParamActions.includes(action.action_name) &&

@@ -9,6 +9,8 @@ import teamsAPI from 'dashboard/api/teams';
 import Spinner from 'dashboard/components-next/spinner/Spinner.vue';
 import Avatar from 'dashboard/components-next/avatar/Avatar.vue';
 import ContactPanel from './ContactPanel.vue';
+import { useAdmin } from 'dashboard/composables/useAdmin';
+import { useAccount } from 'dashboard/composables/useAccount';
 
 const uiFlags = ref({ isLoading: false, isMoving: false });
 const isDragging = ref(false);
@@ -17,6 +19,8 @@ const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
 const store = useStore();
+const { isAdmin } = useAdmin();
+const { accountScopedRoute } = useAccount();
 
 const isGeneralKanban = computed(() => route.name === 'kanban_general');
 const isTeamKanbanBoard = computed(() => route.name === 'kanban_team_board');
@@ -107,6 +111,36 @@ const statusLabel = status => {
   return t(`CHAT_LIST.CHAT_STATUS_FILTER_ITEMS.${status}.TEXT`);
 };
 
+const boardTitle = computed(() =>
+  isGeneralKanban.value
+    ? t('CONVERSATION.KANBAN.GENERAL_TITLE')
+    : currentKanbanMeta.value?.name || t('CONVERSATION.KANBAN.TITLE')
+);
+
+const boardSubtitle = computed(() =>
+  isGeneralKanban.value
+    ? t('CONVERSATION.KANBAN.SUBTITLE_GENERAL')
+    : t('CONVERSATION.KANBAN.SUBTITLE_TEAM')
+);
+
+const columnAccentClass = column => {
+  if (!isGeneralKanban.value && column?.id == null) {
+    return 'border-l-n-slate-8';
+  }
+  return 'border-l-n-brand-9';
+};
+
+const cardLabelsPreview = labels => {
+  if (!Array.isArray(labels) || !labels.length) {
+    return { items: [], more: 0 };
+  }
+  const max = 3;
+  return {
+    items: labels.slice(0, max),
+    more: Math.max(0, labels.length - max),
+  };
+};
+
 const scrollBoard = direction => {
   boardScroller.value?.scrollBy({
     left: direction === 'right' ? 360 : -360,
@@ -146,8 +180,7 @@ const openConversation = async conversation => {
         selectedConversation.value = data;
         store.commit('SET_CURRENT_CHAT_WINDOW', data);
       } else {
-        detailsError.value =
-          'Nao foi possivel carregar os detalhes completos desta conversa.';
+        detailsError.value = t('CONVERSATION.KANBAN.DETAILS_ERROR');
       }
     }
   } finally {
@@ -183,64 +216,102 @@ const backToKanbanList = () => {
   });
 };
 
+const goToAutomations = () => {
+  router.push(accountScopedRoute('automation_list'));
+};
+
 onMounted(fetchBoard);
 watch(() => route.fullPath, fetchBoard);
 </script>
 
 <template>
   <div class="flex w-full min-w-0 h-full bg-n-background">
-    <div class="flex flex-col flex-1 min-w-0 p-4 gap-4">
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-      <h2 class="text-base font-medium text-n-slate-12 shrink-0">
-        {{
-          isGeneralKanban
-            ? 'Kanban Geral'
-            : currentKanbanMeta?.name || $t('CONVERSATION.KANBAN.TITLE')
-        }}
-      </h2>
+    <div class="flex flex-col flex-1 min-w-0 p-4 lg:p-5 gap-4">
       <div
-        class="w-full lg:w-auto flex flex-col sm:flex-row sm:items-center gap-2 rounded-lg border border-n-alpha-2 bg-n-solid-1 px-3 py-2"
+        class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 rounded-xl border border-n-alpha-2 bg-n-solid-1 px-4 py-4 shadow-sm"
       >
-        <button
-          v-if="isTeamKanbanBoard"
-          class="h-9 px-3 text-sm leading-none rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-          type="button"
-          @click="backToKanbanList"
+        <div class="min-w-0 space-y-1">
+          <p
+            class="text-[11px] font-semibold uppercase tracking-wider text-n-slate-10 mb-0"
+          >
+            {{ $t('CONVERSATION.KANBAN.CRM_BADGE') }}
+          </p>
+          <h1 class="text-lg font-semibold text-n-slate-12 tracking-tight truncate mb-0">
+            {{ boardTitle }}
+          </h1>
+          <p class="text-sm text-n-slate-11 mb-0 max-w-prose">
+            {{ boardSubtitle }}
+          </p>
+        </div>
+        <div
+          class="w-full lg:w-auto flex flex-col sm:flex-row sm:items-center gap-2 shrink-0"
         >
-          Voltar para lista
-        </button>
-        <div v-if="isTeamKanbanBoard" class="hidden sm:block h-5 w-px bg-n-alpha-2 mx-1" />
-        <div class="flex items-center gap-2">
-        <button
-          class="h-9 px-2 text-sm leading-none rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-          type="button"
-          @click="scrollBoard('left')"
-        >
-          ←
-        </button>
-        <button
-          class="h-9 px-2 text-sm leading-none rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-          type="button"
-          @click="scrollBoard('right')"
-        >
-          →
-        </button>
-        <button
-          class="h-9 px-2 text-sm leading-none rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-          type="button"
-          @click="scrollToBoardEnd"
-        >
-          ⇥
-        </button>
-        <button
-          class="h-9 px-3 text-sm leading-none rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2 disabled:opacity-50"
-          :disabled="uiFlags.isLoading || uiFlags.isMoving"
-          @click="fetchBoard"
-        >
-          {{ $t('CONVERSATION.KANBAN.REFRESH') }}
-        </button>
+          <button
+            v-if="isTeamKanbanBoard"
+            class="h-9 px-3 text-sm font-medium leading-none rounded-lg border border-n-alpha-2 bg-n-background text-n-slate-12 hover:bg-n-alpha-2"
+            type="button"
+            @click="backToKanbanList"
+          >
+            {{ $t('CONVERSATION.KANBAN.BACK_TO_LIST') }}
+          </button>
+          <div
+            v-if="isTeamKanbanBoard"
+            class="hidden sm:block h-5 w-px bg-n-alpha-2 mx-1"
+          />
+          <div
+            class="flex items-center gap-1.5 rounded-lg border border-n-alpha-2 bg-n-background p-1"
+          >
+            <button
+              class="h-8 w-8 text-sm font-medium leading-none rounded-md text-n-slate-12 hover:bg-n-alpha-2"
+              type="button"
+              @click="scrollBoard('left')"
+            >
+              ←
+            </button>
+            <button
+              class="h-8 w-8 text-sm font-medium leading-none rounded-md text-n-slate-12 hover:bg-n-alpha-2"
+              type="button"
+              @click="scrollBoard('right')"
+            >
+              →
+            </button>
+            <button
+              class="h-8 w-8 text-sm font-medium leading-none rounded-md text-n-slate-12 hover:bg-n-alpha-2"
+              type="button"
+              @click="scrollToBoardEnd"
+            >
+              ⇥
+            </button>
+            <button
+              class="h-8 px-3 text-xs font-semibold leading-none rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2 disabled:opacity-50"
+              :disabled="uiFlags.isLoading || uiFlags.isMoving"
+              type="button"
+              @click="fetchBoard"
+            >
+              {{ $t('CONVERSATION.KANBAN.REFRESH') }}
+            </button>
+          </div>
         </div>
       </div>
+
+      <div
+        v-if="isAdmin"
+        class="rounded-xl border border-n-alpha-2 bg-n-solid-1 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+      >
+        <p class="text-xs text-n-slate-11 mb-0 max-w-3xl leading-relaxed">
+          {{
+            isGeneralKanban
+              ? $t('CONVERSATION.KANBAN.AUTOMATIONS_HINT_GENERAL')
+              : $t('CONVERSATION.KANBAN.AUTOMATIONS_HINT_TEAM')
+          }}
+        </p>
+        <button
+          type="button"
+          class="h-9 shrink-0 px-3 text-xs font-semibold rounded-lg border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2 whitespace-nowrap"
+          @click="goToAutomations"
+        >
+          {{ $t('CONVERSATION.KANBAN.AUTOMATIONS') }}
+        </button>
       </div>
 
       <div
@@ -256,30 +327,42 @@ watch(() => route.fullPath, fetchBoard);
         ref="boardScroller"
         class="flex-1 min-h-0 w-full overflow-x-auto overflow-y-hidden pb-4"
       >
-        <div class="flex w-max gap-3 pr-10">
+        <div class="flex w-max gap-4 pr-10">
         <div
           v-for="column in columns"
           :key="column.id || 'backlog'"
-          class="w-[300px] shrink-0 rounded-lg border border-n-alpha-2 bg-n-solid-1 flex flex-col"
+          class="w-[320px] shrink-0 flex flex-col rounded-xl bg-n-solid-1 shadow-sm ring-1 ring-n-alpha-2"
         >
-          <div class="px-3 py-2 border-b border-n-alpha-2 flex items-center justify-between">
-            <p class="text-sm font-medium text-n-slate-12">
-              {{
-                !isGeneralKanban && !column.id
-                  ? $t('CONVERSATION.KANBAN.BACKLOG')
-                  : isGeneralKanban
-                    ? statusLabel(column.title)
-                    : column.title
-              }}
-            </p>
-            <span class="text-xs text-n-slate-10">{{ column.conversations.length }}</span>
+          <div
+            class="flex items-center justify-between gap-2 px-3 py-3 border-b border-n-alpha-2 bg-n-alpha-1 rounded-t-xl border-l-4 pl-3"
+            :class="columnAccentClass(column)"
+          >
+            <div class="min-w-0">
+              <p class="text-sm font-semibold text-n-slate-12 truncate mb-0">
+                {{
+                  !isGeneralKanban && !column.id
+                    ? $t('CONVERSATION.KANBAN.BACKLOG')
+                    : isGeneralKanban
+                      ? statusLabel(column.title)
+                      : column.title
+                }}
+              </p>
+              <p class="text-[11px] text-n-slate-10 mb-0 mt-0.5">
+                {{ $t('CONVERSATION.KANBAN.STAGE_TOTAL', { count: column.conversations.length }) }}
+              </p>
+            </div>
+            <span
+              class="shrink-0 tabular-nums rounded-full bg-n-solid-2 px-2.5 py-1 text-xs font-semibold text-n-slate-12 ring-1 ring-n-alpha-2"
+            >
+              {{ column.conversations.length }}
+            </span>
           </div>
 
           <Draggable
             v-model="column.conversations"
             item-key="id"
             group="kanban-conversations"
-            class="p-2 flex flex-col gap-2 min-h-20 max-h-[calc(100vh-220px)] overflow-y-auto"
+            class="p-2.5 flex flex-col gap-2.5 min-h-24 max-h-[calc(100vh-240px)] overflow-y-auto"
             @start="isDragging = true"
             @end="setTimeout(() => { isDragging = false; }, 0)"
             @change="event => onDrop(event, column)"
@@ -287,50 +370,87 @@ watch(() => route.fullPath, fetchBoard);
             <template #item="{ element }">
               <button
                 type="button"
-                class="w-full rounded-md border border-n-alpha-2 bg-n-solid-2 p-2 text-left hover:border-n-brand-6 hover:bg-n-alpha-1"
+                class="group w-full rounded-xl bg-n-solid-1 p-3 text-left ring-1 ring-n-alpha-2 transition-all hover:ring-n-brand/35 hover:shadow-sm"
                 @click="openConversation(element)"
               >
-                <div class="flex items-center justify-between gap-2 mb-1">
-                  <p class="text-xs text-n-slate-10 truncate">#{{ element.display_id }}</p>
+                <div class="flex items-start justify-between gap-2 mb-2">
+                  <p
+                    class="text-[11px] font-semibold tabular-nums text-n-slate-10 uppercase tracking-wide mb-0"
+                  >
+                    {{ $t('CONVERSATION.KANBAN.REF_LABEL') }}
+                    #{{ element.display_id }}
+                  </p>
                   <span
-                    class="px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wide truncate"
+                    class="shrink-0 max-w-[120px] px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wide truncate"
                     :class="statusBadgeClass(element.status)"
                   >
                     {{ statusLabel(element.status) }}
                   </span>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-3">
                   <Avatar
                     :name="
                       element.contact_name || $t('CONVERSATION.KANBAN.UNNAMED_CONTACT')
                     "
                     :src="element.contact_thumbnail"
-                    :size="22"
+                    :size="28"
                     rounded-full
                   />
-                  <p class="text-sm text-n-slate-12 font-medium truncate">
+                  <p class="text-sm text-n-slate-12 font-semibold leading-snug truncate mb-0">
                     {{ element.contact_name || $t('CONVERSATION.KANBAN.UNNAMED_CONTACT') }}
                   </p>
                 </div>
-                <p class="text-xs text-n-slate-11 truncate mt-1">{{ element.inbox_name }}</p>
-                <p
-                  v-if="isGeneralKanban && element.team_name"
-                  class="text-xs text-n-slate-10 truncate"
+
+                <div
+                  v-if="cardLabelsPreview(element.labels).items.length"
+                  class="flex flex-wrap gap-1 mt-2.5"
                 >
-                  Time: {{ element.team_name }}
-                </p>
-                <div v-if="element.assignee_name" class="flex items-center gap-1.5 mt-1">
-                  <Avatar
-                    :name="element.assignee_name"
-                    :src="element.assignee_thumbnail"
-                    :size="16"
-                    rounded-full
-                  />
-                  <p class="text-xs text-n-slate-11 truncate">{{ element.assignee_name }}</p>
+                  <span
+                    v-for="tag in cardLabelsPreview(element.labels).items"
+                    :key="tag"
+                    class="max-w-full truncate rounded-md bg-n-alpha-2 px-2 py-0.5 text-[10px] font-medium text-n-slate-11"
+                  >
+                    {{ tag }}
+                  </span>
+                  <span
+                    v-if="cardLabelsPreview(element.labels).more"
+                    class="rounded-md bg-n-solid-2 px-2 py-0.5 text-[10px] font-semibold text-n-slate-10"
+                  >
+                    {{ $t('CONVERSATION.KANBAN.TAGS_MORE', { count: cardLabelsPreview(element.labels).more }) }}
+                  </span>
                 </div>
-                <p class="text-[11px] text-n-slate-10 truncate mt-1">
-                  {{ formatLastActivity(element.last_activity_at) }}
-                </p>
+
+                <div
+                  class="mt-2.5 flex flex-col gap-1 border-t border-n-alpha-2 pt-2.5 text-xs text-n-slate-11"
+                >
+                  <p v-if="element.inbox_name" class="truncate mb-0">
+                    <span class="text-n-slate-10">{{ $t('CONVERSATION.KANBAN.INBOX') }}:</span>
+                    {{ element.inbox_name }}
+                  </p>
+                  <p
+                    v-if="isGeneralKanban && element.team_name"
+                    class="truncate mb-0"
+                  >
+                    <span class="text-n-slate-10">{{ $t('CONVERSATION.KANBAN.TEAM') }}:</span>
+                    {{ element.team_name }}
+                  </p>
+                  <div v-if="element.assignee_name" class="flex items-center gap-2 min-w-0">
+                    <Avatar
+                      :name="element.assignee_name"
+                      :src="element.assignee_thumbnail"
+                      :size="18"
+                      rounded-full
+                    />
+                    <p class="truncate mb-0">
+                      <span class="text-n-slate-10">{{ $t('CONVERSATION.KANBAN.OWNER') }}:</span>
+                      {{ element.assignee_name }}
+                    </p>
+                  </div>
+                  <p class="text-[11px] text-n-slate-10 mb-0">
+                    <span class="font-medium text-n-slate-11">{{ $t('CONVERSATION.KANBAN.LAST_ACTIVITY') }}:</span>
+                    {{ formatLastActivity(element.last_activity_at) }}
+                  </p>
+                </div>
               </button>
             </template>
           </Draggable>
@@ -342,29 +462,44 @@ watch(() => route.fullPath, fetchBoard);
 
     <aside
       v-if="isDetailsOpen"
-      class="w-[390px] h-full shrink-0 border-l border-n-alpha-2 bg-n-solid-1 overflow-y-auto"
+      class="w-full max-w-[400px] h-full shrink-0 border-l border-n-alpha-2 bg-n-background overflow-y-auto"
     >
-      <div class="flex items-center justify-between px-3 py-2 border-b border-n-alpha-2">
-        <p class="text-sm font-medium text-n-slate-12 mb-0">Detalhes da conversa</p>
-        <div class="flex items-center gap-2">
-          <button
-            type="button"
-            class="h-8 px-2 text-xs rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-            @click="goToFullConversation"
+      <div
+        class="sticky top-0 z-10 border-b border-n-alpha-2 bg-n-solid-1/90 backdrop-blur-md px-3 py-2.5 sm:px-4"
+      >
+        <div
+          class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
+        >
+          <div class="min-w-0">
+            <p class="text-[10px] font-semibold uppercase tracking-wider text-n-slate-10 mb-0.5">
+              {{ $t('CONVERSATION.KANBAN.CRM_BADGE') }}
+            </p>
+            <p class="text-sm font-semibold text-n-slate-12 mb-0 tracking-tight">
+              {{ $t('CONVERSATION.KANBAN.DETAILS_TITLE') }}
+            </p>
+          </div>
+          <div
+            class="flex items-center justify-end gap-1.5 shrink-0 flex-wrap"
           >
-            Ir para conversa
-          </button>
-          <button
-            type="button"
-            class="h-8 px-2 text-xs rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-            @click="closeDetailsPanel"
-          >
-            Fechar
-          </button>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center h-7 min-h-7 px-2.5 text-[11px] font-medium rounded-md border border-n-brand/40 text-n-brand bg-n-solid-1 hover:bg-n-brand hover:text-white hover:border-n-brand transition-colors whitespace-nowrap"
+              @click="goToFullConversation"
+            >
+              {{ $t('CONVERSATION.KANBAN.OPEN_CONVERSATION') }}
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center h-7 min-h-7 px-2 text-[11px] font-medium rounded-md text-n-slate-11 hover:text-n-slate-12 hover:bg-n-alpha-2"
+              @click="closeDetailsPanel"
+            >
+              {{ $t('CONVERSATION.KANBAN.CLOSE') }}
+            </button>
+          </div>
         </div>
       </div>
       <div v-if="isDetailsLoading" class="p-4 text-sm text-n-slate-11">
-        Carregando detalhes...
+        {{ $t('CONVERSATION.KANBAN.LOADING_DETAILS') }}
       </div>
       <div v-else-if="detailsError" class="p-4 text-sm text-n-ruby-11">
         {{ detailsError }}

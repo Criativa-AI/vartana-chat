@@ -1,14 +1,20 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useStore, useMapGetter } from 'dashboard/composables/store';
+import { useAdmin } from 'dashboard/composables/useAdmin';
+import { useAccount } from 'dashboard/composables/useAccount';
 import teamsAPI from 'dashboard/api/teams';
 import Dialog from 'dashboard/components-next/dialog/Dialog.vue';
 import { getRandomColor } from 'dashboard/helper/labelColor';
 
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
 const store = useStore();
+const { isAdmin } = useAdmin();
+const { accountScopedRoute } = useAccount();
 const teams = useMapGetter('teams/getMyTeams');
 const labels = useMapGetter('labels/getLabels');
 
@@ -89,6 +95,10 @@ const fetchKanbans = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const goToAutomations = () => {
+  router.push(accountScopedRoute('automation_list'));
 };
 
 const openBoard = (teamId, kanbanId) => {
@@ -210,7 +220,7 @@ const createLabelFromForm = async () => {
   try {
     await store.dispatch('labels/create', {
       title,
-      description: 'Etapa do kanban por time',
+      description: t('CONVERSATION.KANBAN.HUB.STAGES_LABEL'),
       color: getRandomColor(),
       show_on_sidebar: true,
     });
@@ -279,116 +289,182 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-col w-full min-w-0 h-full bg-n-background p-4 gap-4">
-    <div class="flex items-center justify-between gap-3">
-      <div>
-        <h2 class="text-base font-medium text-n-slate-12">Kanban por Time</h2>
-        <p class="text-sm text-n-slate-11 mb-0">Escolha um fluxo para abrir o board</p>
+  <div class="flex flex-col w-full min-w-0 h-full bg-n-background p-4 lg:p-5 gap-4">
+    <div
+      class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 rounded-xl border border-n-alpha-2 bg-n-solid-1 px-4 py-4 shadow-sm"
+    >
+      <div class="min-w-0 space-y-1">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-n-slate-10 mb-0">
+          {{ $t('CONVERSATION.KANBAN.CRM_BADGE') }}
+        </p>
+        <h1 class="text-lg font-semibold text-n-slate-12 tracking-tight mb-0">
+          {{ $t('CONVERSATION.KANBAN.HUB.TITLE') }}
+        </h1>
+        <p class="text-sm text-n-slate-11 mb-0 max-w-prose">
+          {{ $t('CONVERSATION.KANBAN.HUB.SUBTITLE') }}
+        </p>
       </div>
       <button
-        class="h-9 px-3 text-sm rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
+        class="h-10 px-4 text-sm font-semibold rounded-lg bg-n-brand text-white hover:brightness-110 shrink-0"
         type="button"
         @click="openCreate"
       >
-        + Novo Kanban
+        {{ $t('CONVERSATION.KANBAN.HUB.NEW') }}
       </button>
     </div>
 
-    <div class="rounded-lg border border-n-alpha-2 bg-n-solid-1 p-3">
+    <div class="rounded-xl border border-n-alpha-2 bg-n-solid-1 px-3 py-3 shadow-sm">
       <input
         v-model="search"
         type="text"
-        placeholder="Buscar por time ou kanban"
-        class="w-full h-9 px-3 text-sm rounded-md border border-n-alpha-2 bg-n-background text-n-slate-12"
+        :placeholder="$t('CONVERSATION.KANBAN.HUB.SEARCH_PLACEHOLDER')"
+        class="w-full h-10 px-4 text-sm rounded-lg border border-n-alpha-2 bg-n-background text-n-slate-12 placeholder:text-n-slate-10"
       />
     </div>
 
-    <div v-if="loading" class="text-sm text-n-slate-11">Carregando kanbans...</div>
+    <div
+      v-if="isAdmin"
+      class="rounded-xl border border-n-alpha-2 bg-n-solid-1 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+    >
+      <p class="text-xs text-n-slate-11 mb-0 max-w-3xl leading-relaxed">
+        {{ $t('CONVERSATION.KANBAN.AUTOMATIONS_HINT_TEAM') }}
+      </p>
+      <button
+        type="button"
+        class="h-9 shrink-0 px-3 text-xs font-semibold rounded-lg border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2 whitespace-nowrap"
+        @click="goToAutomations"
+      >
+        {{ $t('CONVERSATION.KANBAN.AUTOMATIONS') }}
+      </button>
+    </div>
 
-    <div v-else class="flex flex-col gap-4 overflow-y-auto">
+    <div v-if="loading" class="text-sm text-n-slate-11 px-1">
+      {{ $t('CONVERSATION.KANBAN.HUB.LOADING') }}
+    </div>
+
+    <div v-else class="flex flex-col gap-5 overflow-y-auto pb-4">
       <section
         v-for="group in filteredGroups"
         :key="group.team.id"
-        class="rounded-lg border border-n-alpha-2 bg-n-solid-1 p-3"
+        class="rounded-xl border border-n-alpha-2 bg-n-solid-1 p-4 shadow-sm"
       >
-        <h3 class="text-sm font-medium text-n-slate-12 mb-3">{{ group.team.name }}</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+        <div class="flex items-center gap-2 mb-4">
+          <span
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-n-alpha-2 text-xs font-bold text-n-slate-11 uppercase"
+          >
+            {{ group.team.name?.charAt(0) || 'T' }}
+          </span>
+          <h2 class="text-sm font-semibold text-n-slate-12 mb-0 truncate">
+            {{ group.team.name }}
+          </h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4">
           <article
             v-for="kanban in group.kanbans"
             :key="kanban.id"
-            class="rounded-md border border-n-alpha-2 bg-n-background p-3 flex flex-col gap-2"
+            class="rounded-xl ring-1 ring-n-alpha-2 bg-n-background p-3.5 flex flex-col gap-2.5 transition-all duration-200 hover:ring-n-brand/30 hover:shadow-sm"
           >
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0">
-                <p class="text-sm font-medium text-n-slate-12 truncate mb-0">
+            <div class="flex items-start justify-between gap-2.5">
+              <div class="min-w-0 flex-1">
+                <p class="text-sm font-semibold text-n-slate-12 truncate mb-0 tracking-tight">
                   {{ kanban.name }}
                 </p>
-                <p class="text-xs text-n-slate-11 truncate mb-0">
-                  {{ kanban.description || 'Sem descricao' }}
+                <p
+                  class="text-[11px] text-n-slate-11 line-clamp-2 mb-0 mt-0.5 leading-snug"
+                >
+                  {{ kanban.description || $t('CONVERSATION.KANBAN.HUB.NO_DESCRIPTION') }}
                 </p>
               </div>
               <button
                 type="button"
-                class="text-xs text-n-slate-11 hover:text-n-slate-12"
+                class="shrink-0 text-sm leading-none text-n-slate-10 hover:text-amber-11 p-1 rounded-md hover:bg-n-alpha-2 transition-colors"
+                :aria-pressed="isFavorite(kanban.id)"
                 @click="toggleFavorite(kanban.id)"
               >
                 {{ isFavorite(kanban.id) ? '★' : '☆' }}
               </button>
             </div>
 
-            <div class="flex items-center gap-2 text-[11px] text-n-slate-10">
-              <span>{{ kanban.columns?.length || 0 }} etapas</span>
-              <span v-if="kanban.is_default" class="px-1.5 py-0.5 rounded bg-n-teal-3 text-n-teal-11">
-                padrao
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span
+                class="text-[10px] font-medium text-n-slate-10 tabular-nums"
+              >
+                {{ $t('CONVERSATION.KANBAN.HUB.STAGES', { count: kanban.columns?.length || 0 }) }}
               </span>
-              <span v-if="isRecent(kanban.id)" class="px-1.5 py-0.5 rounded bg-n-amber-3 text-n-amber-11">
-                recente
+              <span
+                v-if="kanban.is_default"
+                class="px-1.5 py-0.5 rounded-md bg-n-teal-3/80 text-n-teal-11 text-[10px] font-medium"
+              >
+                {{ $t('CONVERSATION.KANBAN.HUB.DEFAULT') }}
+              </span>
+              <span
+                v-if="isRecent(kanban.id)"
+                class="px-1.5 py-0.5 rounded-md bg-n-amber-3/80 text-n-amber-11 text-[10px] font-medium"
+              >
+                {{ $t('CONVERSATION.KANBAN.HUB.RECENT') }}
               </span>
             </div>
 
-            <div class="flex items-center gap-2 flex-wrap">
-              <button
-                type="button"
-                class="h-8 px-3 text-xs rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-                @click="openBoard(group.team.id, kanban.id)"
-              >
-                Abrir
-              </button>
-              <button
-                type="button"
-                class="h-8 px-2 text-xs rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-                @click="openEdit(group.team.id, kanban)"
-              >
-                Editar
-              </button>
-              <button
-                type="button"
-                class="h-8 px-2 text-xs rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-                @click="setDefault(group.team.id, kanban.id)"
-              >
-                Padrao
-              </button>
-              <button
-                type="button"
-                class="h-8 px-2 text-xs rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-                @click="moveKanban(group.team.id, kanban.id, -1)"
-              >
-                ↑
-              </button>
-              <button
-                type="button"
-                class="h-8 px-2 text-xs rounded-md border border-n-alpha-2 text-n-slate-12 hover:bg-n-alpha-2"
-                @click="moveKanban(group.team.id, kanban.id, 1)"
-              >
-                ↓
-              </button>
-              <button
-                type="button"
-                class="h-8 px-2 text-xs rounded-md border border-n-alpha-2 text-n-ruby-11 hover:bg-n-alpha-2"
-                @click="openDelete(group.team.id, kanban)"
-              >
-                Excluir
-              </button>
+            <div
+              class="flex flex-col gap-1.5 pt-2 mt-auto border-t border-n-alpha-2"
+            >
+              <div class="flex items-center flex-wrap gap-1.5">
+                <button
+                  type="button"
+                  class="inline-flex items-center justify-center h-7 min-h-7 px-2.5 text-[11px] font-medium rounded-md border border-n-brand/40 text-n-brand bg-n-solid-1 hover:bg-n-brand hover:text-white hover:border-n-brand transition-colors"
+                  @click="openBoard(group.team.id, kanban.id)"
+                >
+                  {{ $t('CONVERSATION.KANBAN.HUB.OPEN') }}
+                </button>
+                <button
+                  type="button"
+                  class="inline-flex items-center justify-center h-7 min-h-7 px-2 text-[11px] font-medium rounded-md text-n-slate-11 hover:text-n-slate-12 hover:bg-n-alpha-2"
+                  @click="openEdit(group.team.id, kanban)"
+                >
+                  {{ $t('CONVERSATION.KANBAN.HUB.EDIT') }}
+                </button>
+                <button
+                  type="button"
+                  class="hidden sm:flex items-center justify-center h-7 min-h-7 px-2 text-[11px] font-medium rounded-md text-n-slate-11 hover:text-n-slate-12 hover:bg-n-alpha-2"
+                  @click="setDefault(group.team.id, kanban.id)"
+                >
+                  {{ $t('CONVERSATION.KANBAN.HUB.SET_DEFAULT') }}
+                </button>
+                <span
+                  class="inline-flex items-center gap-0.5 ml-auto sm:ml-0"
+                >
+                  <button
+                    type="button"
+                    class="h-7 w-7 inline-flex items-center justify-center text-[11px] font-medium rounded-md ring-1 ring-n-alpha-2 text-n-slate-11 hover:bg-n-alpha-2"
+                    @click="moveKanban(group.team.id, kanban.id, -1)"
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    class="h-7 w-7 inline-flex items-center justify-center text-[11px] font-medium rounded-md ring-1 ring-n-alpha-2 text-n-slate-11 hover:bg-n-alpha-2"
+                    @click="moveKanban(group.team.id, kanban.id, 1)"
+                  >
+                    ↓
+                  </button>
+                </span>
+              </div>
+              <div class="flex items-center justify-between gap-2">
+                <button
+                  type="button"
+                  class="inline-flex items-center h-7 px-2 text-[11px] font-medium rounded-md text-n-slate-11 hover:text-n-slate-12 hover:bg-n-alpha-2 sm:hidden"
+                  @click="setDefault(group.team.id, kanban.id)"
+                >
+                  {{ $t('CONVERSATION.KANBAN.HUB.SET_DEFAULT') }}
+                </button>
+                <button
+                  type="button"
+                  class="inline-flex items-center h-7 px-2 text-[11px] font-medium rounded-md text-n-ruby-11 hover:bg-n-ruby-3/25 ml-auto"
+                  @click="openDelete(group.team.id, kanban)"
+                >
+                  {{ $t('CONVERSATION.KANBAN.HUB.DELETE') }}
+                </button>
+              </div>
             </div>
           </article>
         </div>
@@ -397,10 +473,10 @@ onMounted(async () => {
 
     <Dialog
       ref="formDialogRef"
-      :title="form.mode === 'create' ? 'Novo Kanban' : 'Editar Kanban'"
-      description="Configure o fluxo do kanban por time"
-      confirm-button-label="Salvar"
-      cancel-button-label="Cancelar"
+      :title="form.mode === 'create' ? $t('CONVERSATION.KANBAN.HUB.CREATE_TITLE') : $t('CONVERSATION.KANBAN.HUB.EDIT_TITLE')"
+      :description="$t('CONVERSATION.KANBAN.HUB.CREATE_DESC')"
+      :confirm-button-label="$t('CONVERSATION.KANBAN.HUB.SAVE')"
+      :cancel-button-label="$t('CONVERSATION.KANBAN.HUB.CANCEL')"
       :disable-confirm-button="!form.name || !form.teamId || !form.selectedStageLabelIds.length"
       :is-loading="saving"
       width="2xl"
@@ -408,7 +484,7 @@ onMounted(async () => {
     >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div class="flex flex-col gap-1">
-          <label class="text-xs text-n-slate-11">Time</label>
+          <label class="text-xs text-n-slate-11">{{ $t('CONVERSATION.KANBAN.HUB.FIELD_TEAM') }}</label>
           <select
             v-model="form.teamId"
             :disabled="form.mode === 'edit'"
@@ -420,7 +496,7 @@ onMounted(async () => {
           </select>
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs text-n-slate-11">Nome</label>
+          <label class="text-xs text-n-slate-11">{{ $t('CONVERSATION.KANBAN.HUB.FIELD_NAME') }}</label>
           <input
             v-model="form.name"
             type="text"
@@ -430,7 +506,7 @@ onMounted(async () => {
       </div>
 
       <div class="flex flex-col gap-1 mt-2">
-        <label class="text-xs text-n-slate-11">Descricao</label>
+        <label class="text-xs text-n-slate-11">{{ $t('CONVERSATION.KANBAN.HUB.FIELD_DESCRIPTION') }}</label>
         <textarea
           v-model="form.description"
           rows="2"
@@ -439,12 +515,12 @@ onMounted(async () => {
       </div>
 
       <div class="flex flex-col gap-2 mt-2">
-        <p class="text-xs text-n-slate-11 mb-0">Etapas por etiqueta</p>
+        <p class="text-xs text-n-slate-11 mb-0">{{ $t('CONVERSATION.KANBAN.HUB.STAGES_LABEL') }}</p>
         <div class="flex items-center gap-2">
           <input
             v-model="form.newLabelTitle"
             type="text"
-            placeholder="Criar nova etiqueta"
+            :placeholder="$t('CONVERSATION.KANBAN.HUB.NEW_LABEL_PLACEHOLDER')"
             class="flex-1 h-9 px-2 text-sm rounded-md border border-n-alpha-2 bg-n-solid-1 text-n-slate-12"
           />
           <button
@@ -453,12 +529,12 @@ onMounted(async () => {
             :disabled="creatingLabel || !form.newLabelTitle"
             @click="createLabelFromForm"
           >
-            + Etiqueta
+            {{ $t('CONVERSATION.KANBAN.HUB.ADD_LABEL') }}
           </button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div class="rounded-md border border-n-alpha-2 p-2">
-            <p class="text-xs text-n-slate-11 mb-2">Etiquetas disponiveis</p>
+            <p class="text-xs text-n-slate-11 mb-2">{{ $t('CONVERSATION.KANBAN.HUB.AVAILABLE_LABELS') }}</p>
             <div class="max-h-40 overflow-y-auto">
               <button
                 v-for="label in availableLabels"
@@ -470,13 +546,13 @@ onMounted(async () => {
                 + {{ label.title }}
               </button>
               <p v-if="!availableLabels.length" class="text-xs text-n-slate-10 mb-0 px-2 py-1">
-                Sem etiquetas disponiveis
+                {{ $t('CONVERSATION.KANBAN.HUB.NO_AVAILABLE_LABELS') }}
               </p>
             </div>
           </div>
 
           <div class="rounded-md border border-n-alpha-2 p-2">
-            <p class="text-xs text-n-slate-11 mb-2">Ordem da esteira</p>
+            <p class="text-xs text-n-slate-11 mb-2">{{ $t('CONVERSATION.KANBAN.HUB.STAGE_ORDER') }}</p>
             <div class="max-h-40 overflow-y-auto flex flex-col gap-1">
               <div
                 v-for="(label, index) in orderedSelectedLabels"
@@ -511,15 +587,15 @@ onMounted(async () => {
                   class="text-xs text-n-ruby-11 hover:text-n-ruby-12"
                   @click="removeStageLabel(label.id)"
                 >
-                  Remover
+                  {{ $t('CONVERSATION.KANBAN.HUB.REMOVE') }}
                 </button>
               </div>
               <p v-if="!orderedSelectedLabels.length" class="text-xs text-n-slate-10 mb-0 px-2 py-1">
-                Adicione pelo menos uma etapa
+                {{ $t('CONVERSATION.KANBAN.HUB.ADD_ONE_STAGE') }}
               </p>
             </div>
             <p class="text-[11px] text-n-slate-10 mt-2 mb-0">
-              Selecione no radio qual e o estagio inicial.
+              {{ $t('CONVERSATION.KANBAN.HUB.INITIAL_STAGE_HINT') }}
             </p>
           </div>
         </div>
@@ -528,10 +604,10 @@ onMounted(async () => {
 
     <Dialog
       ref="deleteDialogRef"
-      title="Excluir Kanban"
-      description="Tem certeza que deseja excluir este kanban?"
-      confirm-button-label="Excluir"
-      cancel-button-label="Cancelar"
+      :title="$t('CONVERSATION.KANBAN.HUB.DELETE_TITLE')"
+      :description="$t('CONVERSATION.KANBAN.HUB.DELETE_CONFIRM')"
+      :confirm-button-label="$t('CONVERSATION.KANBAN.HUB.DELETE')"
+      :cancel-button-label="$t('CONVERSATION.KANBAN.HUB.CANCEL')"
       :is-loading="deleting"
       @confirm="confirmDelete"
     />

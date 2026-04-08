@@ -99,7 +99,13 @@
       "TEAM_MESSAGE_INPUT_PLACEHOLDER": "Introduza aqui a sua mensagem",
       "TEAM_DROPDOWN_PLACEHOLDER": "Selecionar equipas",
       "EMAIL_INPUT_PLACEHOLDER": "Inserir e-mail",
-      "URL_INPUT_PLACEHOLDER": "Inserir URL"
+      "URL_INPUT_PLACEHOLDER": "Inserir URL",
+      "CRM_MOVE_KEEP_TEAM": "Manter a equipa atual",
+      "CRM_MOVE_TEAM_LABEL": "Atribuir equipa (opcional)",
+      "CRM_MOVE_TEAM_PLACEHOLDER": "Escolher equipa",
+      "CRM_MOVE_STAGE_LABEL": "Etapa de destino (etiqueta)",
+      "CRM_MOVE_STAGE_PLACEHOLDER": "Escolher etiqueta de etapa",
+      "CRM_MOVE_HELP": "Atualiza a conversa como ao arrastar um cartão no Kanban por equipa: as etiquetas de etapa são substituídas e pode atribuir outra equipa para o registo aparecer no quadro dessa equipa. Use com o evento «CRM — etapa do pipeline alterada» e condições de equipa e etiquetas para encaminhar entre funis."
     },
     "TOGGLE": {
       "ACTIVATION_TITLE": "Ativar regra de automação",
@@ -133,13 +139,16 @@
     "EVENTS": {
       "CONVERSATION_CREATED": "Conversa criada",
       "CONVERSATION_UPDATED": "Conversa atualizada",
+      "CRM_PIPELINE_STAGE_CHANGED": "CRM — etapa do pipeline alterada (Kanban por equipa)",
+      "CRM_STATUS_CHANGED": "CRM — estado da conversa alterado (quadro por estado)",
       "MESSAGE_CREATED": "Mensagem criada",
-      "CONVERSATION_RESOLVED": "Conversation Resolved",
+      "CONVERSATION_RESOLVED": "Conversa resolvida",
       "CONVERSATION_OPENED": "Conversa aberta"
     },
     "ACTIONS": {
       "ASSIGN_AGENT": "Atribuir ao agente",
       "ASSIGN_TEAM": "Atribuir equipa",
+      "MOVE_CRM_PIPELINE_STAGE": "Mover para etapa do pipeline CRM (equipa + etiqueta)",
       "ADD_LABEL": "Adicionar etiqueta",
       "REMOVE_LABEL": "Remover um rótulo",
       "SEND_EMAIL_TO_TEAM": "Enviar um e-mail para a equipa",

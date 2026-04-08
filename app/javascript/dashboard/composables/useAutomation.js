@@ -169,6 +169,8 @@ export function useAutomation(startValue = null) {
       'message_created',
       'conversation_created',
       'conversation_updated',
+      'crm_pipeline_stage_changed',
+      'crm_status_changed',
       'conversation_opened',
     ].forEach(eventToUpdate => {
       const standardConditions = automationTypes[

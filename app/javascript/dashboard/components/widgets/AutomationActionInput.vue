@@ -1,5 +1,6 @@
 <script>
 import AutomationActionTeamMessageInput from './AutomationActionTeamMessageInput.vue';
+import AutomationActionCrmPipelineMoveInput from './AutomationActionCrmPipelineMoveInput.vue';
 import AutomationActionFileInput from './AutomationFileInput.vue';
 import WootMessageEditor from 'dashboard/components/widgets/WootWriter/Editor.vue';
 import NextButton from 'dashboard/components-next/button/Button.vue';
@@ -10,6 +11,7 @@ import NextInput from 'dashboard/components-next/input/Input.vue';
 export default {
   components: {
     AutomationActionTeamMessageInput,
+    AutomationActionCrmPipelineMoveInput,
     AutomationActionFileInput,
     WootMessageEditor,
     NextButton,
@@ -93,7 +95,9 @@ export default {
       return this.actionTypes.map(a => ({ id: a.key, name: a.label }));
     },
     isVerticalLayout() {
-      return ['team_message', 'textarea'].includes(this.inputType);
+      return ['team_message', 'textarea', 'crm_pipeline_move'].includes(
+        this.inputType
+      );
     },
     castMessageVmodel: {
       get() {
@@ -104,6 +108,18 @@ export default {
       },
       set(value) {
         this.action_params = value;
+      },
+    },
+  },
+  watch: {
+    action_name: {
+      immediate: true,
+      handler(val) {
+        if (val !== 'crm_move_to_pipeline_stage') return;
+        const p = this.action_params;
+        if (!Array.isArray(p) || p.length < 2) {
+          this.action_params = ['nil', null];
+        }
       },
     },
   },
@@ -184,6 +200,11 @@ export default {
         v-if="inputType === 'team_message'"
         v-model="action_params"
         :teams="dropdownValues"
+        :dropdown-max-height="dropdownMaxHeight"
+      />
+      <AutomationActionCrmPipelineMoveInput
+        v-if="inputType === 'crm_pipeline_move'"
+        v-model="action_params"
         :dropdown-max-height="dropdownMaxHeight"
       />
       <WootMessageEditor
