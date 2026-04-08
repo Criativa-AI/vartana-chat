@@ -11,7 +11,7 @@ const store = useStore();
 const isLoading = ref(false);
 const globalConfig = computed(() => store.getters['globalConfig/get']);
 const isAChatwootInstance = computed(
-  () => globalConfig.value.installationName === 'Chatwoot'
+  () => globalConfig.value.installationName === 'Vartana Talk'
 );
 
 onBeforeMount(() => {
@@ -42,13 +42,13 @@ const resizeContainers = () => {
             <img
               :src="globalConfig.logo"
               :alt="globalConfig.installationName"
-              class="block w-auto h-7 dark:hidden"
+              class="block w-auto h-20 dark:hidden"
             />
             <img
               v-if="globalConfig.logoDark"
               :src="globalConfig.logoDark"
               :alt="globalConfig.installationName"
-              class="hidden w-auto h-7 dark:block"
+              class="hidden w-auto h-20 dark:block"
             />
             <h2 class="mt-6 text-2xl font-semibold text-n-slate-12">
               {{

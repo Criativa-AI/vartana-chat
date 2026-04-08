@@ -15,6 +15,7 @@ import {
   getMenuAnchor,
   calculateMenuPosition,
   stripUnsupportedFormatting,
+  stripInlineBase64Images,
 } from '../editorHelper';
 import { FORMATTING } from 'dashboard/constants/editor';
 import { EditorState } from '@chatwoot/prosemirror-schema';
@@ -420,6 +421,36 @@ describe('extractTextFromMarkdown', () => {
     const expected =
       "Hello World\nThis is a bold text with a link.\nHere's an image:\nList item 1\nList item 2\nItalic text";
     expect(extractTextFromMarkdown(markdown)).toEqual(expected);
+  });
+});
+
+describe('stripInlineBase64Images', () => {
+  it('removes markdown data:image base64 images and sets hasInlineImages', () => {
+    const content =
+      'Hello\n![x](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAE)\nWorld';
+    const { sanitizedContent, hasInlineImages } =
+      stripInlineBase64Images(content);
+
+    expect(hasInlineImages).toBe(true);
+    expect(sanitizedContent).not.toContain('data:image/png;base64');
+    expect(sanitizedContent).toContain('Hello');
+    expect(sanitizedContent).toContain('World');
+  });
+
+  it('leaves hosted image markdown unchanged', () => {
+    const content = '![](https://example.com/logo.png)';
+    const { sanitizedContent, hasInlineImages } =
+      stripInlineBase64Images(content);
+
+    expect(hasInlineImages).toBe(false);
+    expect(sanitizedContent).toBe(content);
+  });
+
+  it('returns empty hasInlineImages for empty input', () => {
+    expect(stripInlineBase64Images('')).toEqual({
+      sanitizedContent: '',
+      hasInlineImages: false,
+    });
   });
 });
 
@@ -884,7 +915,7 @@ describe('stripUnsupportedFormatting', () => {
     });
 
     it('preserves email autolinks', () => {
-      const content = 'Contact us at <support@chatwoot.com>';
+      const content = 'Contact us at <support@vartana.ia.br>';
       expect(stripUnsupportedFormatting(content, fullSchema)).toBe(content);
     });
 
@@ -922,10 +953,10 @@ describe('stripUnsupportedFormatting', () => {
       // Underscores in URLs should not be stripped as italic formatting
       expect(
         stripUnsupportedFormatting(
-          'https://www.chatwoot.com/new_first_second-third/ssd',
+          'https://www.vartana.ia.br/new_first_second-third/ssd',
           emptySchema
         )
-      ).toBe('https://www.chatwoot.com/new_first_second-third/ssd');
+      ).toBe('https://www.vartana.ia.br/new_first_second-third/ssd');
 
       // Underscores in variable names should not be stripped
       expect(
@@ -980,8 +1011,8 @@ describe('stripUnsupportedFormatting', () => {
     });
 
     it('converts email autolinks to plain text', () => {
-      const content = 'Reach us at <admin@chatwoot.com> for help';
-      const expected = 'Reach us at admin@chatwoot.com for help';
+      const content = 'Reach us at <admin@vartana.ia.br> for help';
+      const expected = 'Reach us at admin@vartana.ia.br for help';
       expect(stripUnsupportedFormatting(content, emptySchema)).toBe(expected);
     });
 
