@@ -317,12 +317,12 @@ const menuItems = computed(() => {
       ],
     },
     {
-      name: 'Kanban',
+      name: 'CRM',
       label: t('SIDEBAR.KANBAN'),
       icon: 'i-lucide-columns-3',
       children: [
         {
-          name: 'Kanban Geral',
+          name: 'CRM overview',
           label: t('SIDEBAR.KANBAN_GENERAL'),
           activeOn: ['kanban_general'],
           to: accountScopedRoute('kanban_general'),
@@ -330,7 +330,7 @@ const menuItems = computed(() => {
         ...(hasTeamKanbanAccess.value
           ? [
               {
-                name: 'Kanban Times',
+                name: 'CRM squads',
                 label: t('SIDEBAR.KANBAN_TEAMS'),
                 activeOn: ['kanban_teams_hub', 'kanban_team_board'],
                 to: accountScopedRoute('kanban_teams_hub'),

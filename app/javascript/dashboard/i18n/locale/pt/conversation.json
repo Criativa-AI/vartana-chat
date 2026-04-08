@@ -116,7 +116,7 @@
     },
     "MENTION": {
       "AGENTS": "Agentes",
-      "TEAMS": "Equipas"
+      "TEAMS": "Squads"
     },
     "CUSTOM_SNOOZE": {
       "TITLE": "Suspender até",
@@ -160,7 +160,7 @@
       "ASSIGN_AGENT": "Atribuir agente",
       "ASSIGN_LABEL": "Atribuir etiqueta",
       "AGENTS_LOADING": "A carregar agentes...",
-      "ASSIGN_TEAM": "Atribuir equipa",
+      "ASSIGN_TEAM": "Atribuir squad",
       "DELETE": "Apagar conversa",
       "OPEN_IN_NEW_TAB": "Open in new tab",
       "COPY_LINK": "Copy conversation link",
@@ -179,8 +179,8 @@
           "FAILED": "Couldn't remove label. Please try again."
         },
         "TEAM_ASSIGNMENT": {
-          "SUCCESFUL": "Equipa \"{team}\" atribuída  a conversa de ID {conversationId}",
-          "FAILED": "Não foi possível atribuir equipa. Por favor, tente novamente."
+          "SUCCESFUL": "Squad \"{team}\" atribuído à conversa de ID {conversationId}",
+          "FAILED": "Não foi possível atribuir squad. Por favor, tente novamente."
         }
       }
     },
@@ -245,14 +245,14 @@
         "EXPAND": "Expand preview"
       }
     },
-    "VISIBLE_TO_AGENTS": "Nota Privada: Apenas visível para si e para a sua equipa",
+    "VISIBLE_TO_AGENTS": "Nota privada: apenas visível para si e para o seu squad",
     "CHANGE_STATUS": "Estado da conversa alterado",
     "CHANGE_STATUS_FAILED": "A mudança de estado da conversa falhou",
     "CHANGE_AGENT": "Responsável da conversa alterado",
     "CHANGE_AGENT_FAILED": "Falha na alteração da atribuição",
     "ASSIGN_LABEL_SUCCESFUL": "Etiqueta atribuída com sucesso",
     "ASSIGN_LABEL_FAILED": "Falha na atribuição de etiqueta",
-    "CHANGE_TEAM": "Equipa da conversa alterada",
+    "CHANGE_TEAM": "Squad da conversa alterado",
     "SUCCESS_DELETE_CONVERSATION": "Conversa apagada",
     "FAIL_DELETE_CONVERSATION": "Não foi possível apagar a conversa! Tente novamente",
     "FILE_SIZE_LIMIT": "O ficheiro excede o tamanho limite para anexos de {MAXIMUM_SUPPORTED_FILE_UPLOAD_SIZE} MB",
@@ -299,23 +299,23 @@
       "END_CALL": "Terminar chamada"
     },
     "KANBAN": {
-      "TITLE": "Kanban de conversas",
+      "TITLE": "CRM de conversas",
       "GENERAL_TITLE": "Quadro por estado",
       "REFRESH": "Atualizar",
-      "LOADING": "A carregar o kanban",
+      "LOADING": "A carregar o CRM",
       "BACKLOG": "Backlog",
       "UNNAMED_CONTACT": "Contacto sem nome",
       "SUBTITLE_GENERAL": "Acompanhe todas as conversas abertas por estado do ciclo.",
       "SUBTITLE_TEAM": "Pipeline por etapa. Arraste os cartões para avançar negócios.",
       "REF_LABEL": "Ref.",
       "INBOX": "Caixa de entrada",
-      "TEAM": "Equipa",
+      "TEAM": "Squad",
       "OWNER": "Responsável",
       "LAST_ACTIVITY": "Última atividade",
       "STAGE_TOTAL": "{count} nesta etapa",
       "CRM_BADGE": "Pipeline",
       "AUTOMATIONS": "Automações",
-      "AUTOMATIONS_HINT_TEAM": "Ao arrastar um cartão, as etiquetas de etapa são atualizadas na conversa. Em Automações, use o evento «CRM — etapa do pipeline alterada» com condições de equipa e etiquetas e, nas ações, «Mover para etapa do pipeline CRM» para entregar o registo noutro quadro ou equipa.",
+      "AUTOMATIONS_HINT_TEAM": "Ao arrastar um cartão, as etiquetas de etapa são atualizadas na conversa. Em Automações, use o evento «CRM — etapa do pipeline alterada» com condições de squad e etiquetas e, nas ações, «Mover para etapa do pipeline CRM» para entregar o registo noutro quadro ou squad.",
       "AUTOMATIONS_HINT_GENERAL": "Ao arrastar um cartão, o estado da conversa é atualizado (aberta / pendente / resolvida). Use o evento «CRM — estado da conversa alterado» com uma condição de Estado para automatizar quando o cartão muda de coluna.",
       "TAGS_MORE": "+{count}",
       "BACK_TO_LIST": "Voltar aos quadros",
@@ -325,10 +325,10 @@
       "LOADING_DETAILS": "A carregar o registo…",
       "DETAILS_ERROR": "Não foi possível carregar os detalhes completos deste registo.",
       "HUB": {
-        "TITLE": "Pipelines por equipa",
+        "TITLE": "Pipelines por squad",
         "SUBTITLE": "Escolha um quadro para abrir o pipeline ao estilo CRM.",
         "NEW": "Novo quadro",
-        "SEARCH_PLACEHOLDER": "Pesquisar equipa ou quadro",
+        "SEARCH_PLACEHOLDER": "Pesquisar squad ou quadro",
         "LOADING": "A carregar quadros…",
         "STAGES": "{count} etapas",
         "NO_DESCRIPTION": "Sem descrição",
@@ -340,10 +340,10 @@
         "DELETE": "Eliminar",
         "CREATE_TITLE": "Novo quadro",
         "EDIT_TITLE": "Editar quadro",
-        "CREATE_DESC": "Configure as etapas deste pipeline de equipa.",
+        "CREATE_DESC": "Configure as etapas deste pipeline de squad.",
         "SAVE": "Guardar",
         "CANCEL": "Cancelar",
-        "FIELD_TEAM": "Equipa",
+        "FIELD_TEAM": "Squad",
         "FIELD_NAME": "Nome",
         "FIELD_DESCRIPTION": "Descrição",
         "STAGES_LABEL": "Etapas a partir de etiquetas",
@@ -409,7 +409,7 @@
   "CONVERSATION_SIDEBAR": {
     "ASSIGNEE_LABEL": "Agente atribuído",
     "SELF_ASSIGN": "Atribuir a mim",
-    "TEAM_LABEL": "Equipa atribuída",
+    "TEAM_LABEL": "Squad atribuído",
     "SELECT": {
       "PLACEHOLDER": "Nenhuma"
     },
