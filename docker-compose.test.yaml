@@ -10,12 +10,15 @@ services:
         EXECJS_RUNTIME: Disabled
         RAILS_ENV: 'production'
         RAILS_SERVE_STATIC_FILES: 'true'
-    image: chatwoot:latest
+    image: vartana-chat:test
     env_file: .env ## Change this file for customized env variables
 
   rails:
     <<: *base
-    image: chatwoot:latest
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    image: vartana-chat:test
     depends_on:
       - postgres
       - redis
@@ -29,7 +32,10 @@ services:
 
   sidekiq:
     <<: *base
-    image: chatwoot:latest
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    image: vartana-chat:test
     depends_on:
       - postgres
       - redis
