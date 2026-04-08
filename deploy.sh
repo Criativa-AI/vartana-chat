@@ -1,8 +1,15 @@
 #!/bin/bash
 
 # Vartana Talk Deployment Script
-# This script pulls the latest changes and rebuilds the containers without cache
-# to ensure all branding and code changes are applied.
+# 
+# Para executar este script LOCALMENTE na VPS, use:
+# ./deploy.sh
+# 
+# Para executar REMOTAMENTE da sua máquina (via SSH), use:
+# ssh -i ~/.ssh/hetzner_key root@135.181.101.28 "cd ~/projetos/vartana-chat && ./deploy.sh"
+# 
+# Este script puxa as últimas alterações e reconstrói os containers sem cache
+# para garantir que todas as mudanças de marca e código sejam aplicadas.
 
 echo "🚀 Iniciando deploy do Vartana Talk..."
 
