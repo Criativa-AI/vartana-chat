@@ -19,6 +19,7 @@ export default {
       name: 'kanban_general',
       meta: {
         permissions: CONVERSATION_PERMISSIONS,
+        featureFlag: 'crm_criativa',
       },
       component: KanbanView,
     },
@@ -27,6 +28,7 @@ export default {
       name: 'kanban_teams_hub',
       meta: {
         permissions: CONVERSATION_PERMISSIONS,
+        featureFlag: 'crm_criativa',
       },
       component: KanbanTeamsHubView,
     },
@@ -35,6 +37,7 @@ export default {
       name: 'kanban_team_board',
       meta: {
         permissions: CONVERSATION_PERMISSIONS,
+        featureFlag: 'crm_criativa',
       },
       component: KanbanView,
     },

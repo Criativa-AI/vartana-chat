@@ -63,6 +63,13 @@ const hasAdvancedAssignment = computed(() => {
   );
 });
 
+const hasCrmCriativa = computed(() => {
+  return isFeatureEnabledonAccount.value(
+    accountId.value,
+    'crm_criativa'
+  );
+});
+
 const toggleShortcutModalFn = show => {
   if (show) {
     emit('openKeyShortcutModal');
@@ -316,29 +323,33 @@ const menuItems = computed(() => {
         },
       ],
     },
-    {
-      name: 'CRM',
-      label: t('SIDEBAR.KANBAN'),
-      icon: 'i-lucide-columns-3',
-      children: [
-        {
-          name: 'CRM overview',
-          label: t('SIDEBAR.KANBAN_GENERAL'),
-          activeOn: ['kanban_general'],
-          to: accountScopedRoute('kanban_general'),
-        },
-        ...(hasTeamKanbanAccess.value
+        ...(hasCrmCriativa.value
           ? [
               {
-                name: 'CRM squads',
-                label: t('SIDEBAR.KANBAN_TEAMS'),
-                activeOn: ['kanban_teams_hub', 'kanban_team_board'],
-                to: accountScopedRoute('kanban_teams_hub'),
+                name: 'CRM',
+                label: t('SIDEBAR.KANBAN'),
+                icon: 'i-lucide-columns-3',
+                children: [
+                  {
+                    name: 'CRM overview',
+                    label: t('SIDEBAR.KANBAN_GENERAL'),
+                    activeOn: ['kanban_general'],
+                    to: accountScopedRoute('kanban_general'),
+                  },
+                  ...(hasTeamKanbanAccess.value
+                    ? [
+                        {
+                          name: 'CRM squads',
+                          label: t('SIDEBAR.KANBAN_TEAMS'),
+                          activeOn: ['kanban_teams_hub', 'kanban_team_board'],
+                          to: accountScopedRoute('kanban_teams_hub'),
+                        },
+                      ]
+                    : []),
+                ],
               },
             ]
           : []),
-      ],
-    },
     {
       name: 'Captain',
       icon: 'i-woot-captain',
